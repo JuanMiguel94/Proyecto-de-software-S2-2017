@@ -1,0 +1,10 @@
+{  
+	"title"    : "archivo configuracion base de datos",
+	"description": "archivo con los parametros de configuracion para la conexion a mysql",
+	"params"     : {
+		"host"     : "localhost",
+		"user"     : "root",
+		"password" : "12345",
+		"database" : "mydb"
+	}  
+}

@@ -1,0 +1,85 @@
+<div>
+  	<ol class="breadcrumb">
+	  <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administración</li>
+	  <li class="active">Gestionar Usuarios</li>
+	</ol>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+	            <script type="text/ng-template" id="confirmationModalTemplate.html">
+			        <div class="modal-header">
+			            <h3 class="modal-title">{{modalContent.title}}</h3>
+			        </div>
+			        <div class="modal-body">
+			            <p>{{modalContent.message}}</p>
+			        </div>
+			        <div class="modal-footer">
+			            <button class="btn btn-primary" type="button" ng-click="ok()">Confirmar</button>
+			            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancelar</button>
+			        </div>
+				</script>
+                <table class="table table-striped table-hover">
+                	<thead>
+						<tr>
+							<th>Usuario</th>
+							<th>Nombre</th>
+							<th>Cédula</th>
+							<th>Correo</th>
+							<th>Tipo</th>
+							<th>Fecha Inicio Autorización</th>
+							<th>Fecha Final Autorización</th>
+							<th>&nbsp;</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input class="form-control" ng-model="inputUser.usuario" placeholder="Ingrese el usuario"></td>
+							<td><input class="form-control" ng-model="inputUser.nombre" placeholder="Ingrese el nombre del usuario"></td>
+							<td><input class="form-control" ng-model="inputUser.cedula" placeholder="Ingrese la cédula del usuario"></td>
+							<td><input class="form-control" ng-model="inputUser.correo" placeholder="Ingrese el correo del usuario"></td>
+							<td>
+								<select class="form-control" ng-model="inputUser.tipo" placeholder="Ingrese el tipo de Usuario">
+									<option value="" disabled selected>Tipo</option>
+									<option value="Administrador">Administrador</option>
+									<option value="Coordinador">Coordinador</option>
+								</select>
+							</td>
+							<td  class="col-xs-2">
+								<p class="input-group">
+					              <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="inputUser.fechaInicioAutorizacion" placeholder="Fecha Inicial" is-open="showRegDate"  date-disabled="false" close-text="Cerrar" current-text="Hoy" ng-readonly="true"/>
+					              <span class="input-group-btn"> 
+					                <button type="button" class="btn btn-default" ng-click="openRegDatePickerPopUp()"><i class="glyphicon glyphicon-calendar"></i></button>
+					              </span>
+				              	</p>
+				            </td>
+				            <td  class="col-xs-2" >
+								<p class="input-group">
+					              <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="inputUser.fechaFinalAutorizacion" placeholder="Fecha Final" is-open="showEndDate"  date-disabled="false" close-text="Cerrar" current-text="Hoy" ng-readonly="true"/>
+					              <span class="input-group-btn"> 
+					                <button type="button" class="btn btn-default" ng-click="openEndDatePickerPopUp()"><i class="glyphicon glyphicon-calendar"></i></button>
+					              </span>
+				              	</p>
+				            </td>
+							<td style="white-space: nowrap">
+			                    <button class="btn btn-primary btn-xs"  uib-tooltip="agregar" ng-click="addUser(inputUser)"><span class="glyphicon glyphicon-plus"></span></button> 
+			                    <button class="btn btn-info btn-xs" uib-tooltip="actualizar" ng-click="updateUser(inputUser)"><span class="glyphicon glyphicon-refresh"></span></button>
+			                </td>
+						</tr>
+						<tr ng-repeat="user in usersList" ng-click="editUser(user)" style="cursor:pointer">
+							<td>{{user.usuario}}</td> 
+							<td>{{user.nombre}}</td>
+							<td>{{user.cedula}}</td> 
+							<td>{{user.correo}}</td> 
+							<td>{{user.tipo}}</td>
+							<td>{{user.fechaInicioAutorizacion | date: 'dd-MM-yyyy'}}</td> 
+							<td>{{user.fechaFinalAutorizacion | date: 'dd-MM-yyyy'}}</td>    
+							<td style="white-space: nowrap">
+			               		<button class="btn btn-danger btn-xs"  uib-tooltip="deshabilitar" ng-click="disableUser(user.usuario)"><span class="glyphicon glyphicon-trash"></span></button> 
+			                </td>
+						</tr>
+					</tbody>
+				</table>
+            </div>
+        </div>
+	</div>
+</div>

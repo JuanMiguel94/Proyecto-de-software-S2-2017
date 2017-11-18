@@ -1,0 +1,159 @@
+<div>
+	<ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Funcionarios</li>
+        <li class="active">Nuevo funcionario</li>
+    </ol>
+    <div>
+    	<div class="container"> 
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Ingrese los datos personales del funcionario</p>
+                    <form name="funcionarioForm" novalidate>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre</th>
+                                    <th>Primer Apellido</th>
+                                    <th>Segundo Apellido</th>
+                                    <th>Fecha Nacimiento</th>
+                                    <th>Area de Especialidad</th>
+                                </tr>
+                            </thead>
+                            <tbody> 
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Cédula" required ng-model="funcionario.infoPersonal.cedula" required>
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Nombre" required ng-model="funcionario.infoPersonal.nombre" required>
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Primer Apellido" required ng-model="funcionario.infoPersonal.primerApellido" requiered>
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Segundo Apellido" required ng-model="funcionario.infoPersonal.segundoApellido" requiered>
+                                        </input>
+                                    </td> 
+                                    <td class="col-xs-2" >
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{dateSettings.dateFormat}}" ng-model="funcionario.infoPersonal.fecha" is-open="dateSettings.showRegDate"  date-disabled="false" close-text="Cerrar" current-text="Hoy" ng-readonly="true" requiered/>
+                                            <span class="input-group-btn"> 
+                                                <button type="button" class="btn btn-default" ng-click="openDatePickerPopUp()">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Area de Especialidad" required ng-model="funcionario.infoPersonal.especialidad"> 
+                                    </td>
+                                </tr>             
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <h4>Información Académica</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Ingrese los datos académicos del funcionario</p>
+                    <form name="academicForm" novalidate>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Universidad</th>
+                                    <th>Grado Académico</th>
+                                    <th>Año de Graduación</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Título" ng-model="inputFuncionario.infoAcademica.titulo" required></input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Universidad" ng-model="inputFuncionario.infoAcademica.universidad" required ></input>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" ng-model="inputFuncionario.infoAcademica.grado">
+                                            <option value="" disabled selected>Grado</option>
+                                            <option ng-repeat="degree in degreeList">{{degree}}</option>
+                                        </select>   
+                                    </td>
+                                    <td  class="col-xs-2" >
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{yearDegreeSettings.yearFormat}}" ng-model="inputFuncionario.infoAcademica.annoGraduacion" is-open="yearDegreeSettings.showRegYear" datepicker-options="yearDegreeSettings" date-disabled="disabled(date, mode)" close-text="Cerrar" current-text="Hoy" ng-readonly="true" required/>
+                                            <span class="input-group-btn"> 
+                                                <button type="button" class="btn btn-default" ng-click="openYearDegreePopUp($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs"  uib-tooltip="agregar" ng-click="validAcademicForm(academicForm.$valid, inputFuncionario.infoAcademica)"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <td>
+                                </tr>  
+                                <tr ng-repeat = "academico in funcionario.infoAcademica">
+                                    <td>{{academico.titulo}}</td>
+                                    <td>{{academico.universidad}}</td> 
+                                    <td>{{academico.grado}}</td> 
+                                    <td>{{academico.annoGraduacion | date: 'yyyy'}}</td>  
+                                    <td></td>  
+                                </tr>         
+                            </tbody>
+                        </table>
+                    </form>   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <h4>Experiencia Laboral</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Ingrese los datos para el concurso de antecedentes del funcionario</p>
+                    <form name="recordForm" novalidate>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Antecedentes</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <textarea class="form-control" type="text" align="justify" placeholder="Descripción" ng-model="inputFuncionario.antecedente" required></textarea>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs"  uib-tooltip="agregar" ng-click="validRecordForm(recordForm.$valid, inputFuncionario.antecedente)"><span class="glyphicon glyphicon-plus"></span></button>
+                                    </td>
+                                </tr>  
+                                <tr ng-repeat = "ante in funcionario.antecedentes"> 
+                                    <td>{{ante.descripcion}}</td> 
+                                    <td></td>  
+                                </tr>          
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div>
+        <div class="container">
+            <button class="btn btn-primary center-block" ng-click="validatedFuncionario(funcionarioForm.$valid, funcionario)">Agregar Funcionario</button> 
+            <br></br>
+       </div>
+    </div>
+</div>

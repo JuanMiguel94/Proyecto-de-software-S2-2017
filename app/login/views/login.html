@@ -1,0 +1,43 @@
+<div>
+    <div>
+        <nav class="navbar navbar-default navbar-custom">
+            <div class="container-fluid">
+                <div class="navbar-header" >
+                    <div class="col-md-4" >
+                        <img alt="Brand" src="/images/tec-logo1024.png">
+                    </div>
+                    <div class="col-md-8"></div>
+                </div>
+            </div>
+        </nav>
+        <br><br/>     
+    </div>
+    <!--div for login data-->
+    <div>
+        <br><br/>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" align="center">
+            <h1 style="color:#000333;">Sistema de Apoyo Administrativo</h1>
+            <br><br/>
+            <div class="panel-body" align="justify">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-user"></span>
+                    </span>
+                    <input class="form-control" type="text" placeholder="Usuario" required ng-model="userData.userName"></input>
+                </div> 
+                <br><br>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-lock"></span>
+                    </span>
+                    <input class="form-control" type="password" placeholder="Contraseña" required ng-model="userData.password"></input>
+                </div> 
+                <br><br>
+                <button class="btn btn-primary btn-lg btn-block" type="button"  ng-click="login(userData)">Iniciar Sesión</button>
+                <br><br/>
+            </div>
+        </div>
+        <div class="col-md-4"></div> 
+    </div>
+</div> 

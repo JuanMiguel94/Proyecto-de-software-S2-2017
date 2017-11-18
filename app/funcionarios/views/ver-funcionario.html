@@ -1,0 +1,89 @@
+<div> 
+    <ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Funcionarios</li>
+        <li class="active">Ver funcionario</li>
+    </ol> 
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table id ="funcionariosTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Area de Especialidad</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <tr>
+                            <td>{{funcionario.infoPersonal.cedula}}</td>
+                            <td>{{funcionario.infoPersonal.nombre}}</td> 
+                            <td>{{funcionario.infoPersonal.apellido1}}</td> 
+                            <td>{{funcionario.infoPersonal.apellido2}}</td>  
+                            <td>{{funcionario.infoPersonal.fechaNacimiento | date: 'dd-MM-yyyy'}}</td> 
+                            <td>{{funcionario.infoPersonal.areaEspecialidad}}</td>   
+                        </tr>             
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <h4>Información Académica</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id ="funcionariosTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Universidad</th>
+                                <th>Grado Académico</th>
+                                <th>Año de Graduación</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr ng-repeat = "academico in funcionario.infoAcademica">
+                                <td>{{academico.titulo}}</td>
+                                <td>{{academico.universidad}}</td> 
+                                <td>{{academico.gradoAcademico}}</td> 
+                                <td>{{academico.annoGraduacion}}</td>    
+                            </tr>         
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+       </div>
+    </div>
+    <div>
+        <div class="container">
+            <h4>Información de Antecedentes</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id ="funcionariosTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Antecedente</th>
+                            </tr>
+                        </thead>
+                        <tbody>  
+                            <tr ng-repeat = "ante in funcionario.antecedentes">
+                                <td>{{ante.descripcion}}</td> 
+                            </tr>          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div>
+        <div class="container">
+            <button class="btn btn-primary" ng-click="sendToFuncionariosView()">Regresar</button> 
+            <br></br>
+       </div>
+    </div>
+    <br></br>
+</div>

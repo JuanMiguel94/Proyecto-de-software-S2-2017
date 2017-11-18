@@ -1,0 +1,54 @@
+<div> 
+    <ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administración</li>
+        <li class="active">Asignar funcionarios a dependencias</li>
+    </ol>
+    <div class="container">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+            <input class="form-control" type="text" placeholder="Inserte una palabra para filtrar los resultados" required ng-model="mdlTag"></input>
+            <span class="input-group-addon">
+                Resultados: <span class="badge">{{filters.length}}</span>
+            </span>
+        </div> 
+        <br></br>  
+    </div> 
+    <div class="container">
+        <div align="center">
+            <div style="width:40%;">
+                <h3>Dependencias</h3>
+                <div>
+                    <select class="btn btn-primary dropdown-toggle" style="width:80%" ng-model="selectedDependency" ng-change="getFuncionarios(selectedDependency)">
+                        <option ng-repeat="depen in dependenciaList">{{depen.id}} - {{depen.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div style="width:50%;">
+                <h3>Funcionarios</h3>
+                <div style="display:inline-block; overflow:scroll; width:80%; height:300px; text-align: justify; border: 2px; border-color:blue">
+                    <div ng-click="checkFunc(func)" ng-repeat="func in filters=(funcionarioList | filter:mdlTag)">
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <label for="fancy-checkbox-primary" class="btn btn-primary">
+                                    <span id="{{func.id}}"></span>
+                                    <span> </span>
+                                </label>
+                                <label for="fancy-checkbox-primary" class="btn btn-default">
+                                    {{func.nombre}} {{func.apellido1}} {{func.apellido2}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <button class="btn btn-primary center-block" ng-click="assign(funcionarioList, selectedDependency)">Asignar funcionarios</button>
+    <br><br>
+</div>

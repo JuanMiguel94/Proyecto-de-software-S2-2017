@@ -1,0 +1,88 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Sistema de apoyo adminsitrativo</title>
+
+        <link rel="stylesheet" href="libs/css/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="libs/css/style/font-awesome.min.css">
+        <link rel="stylesheet" href="libs/css/angular-ui-notification/angular-ui-notification.min.css">
+        <link rel="stylesheet" href="libs/css/angular-ui-navbar/ui-navbar.css">
+        <link rel="stylesheet" href="libs/css/style/sticky-footer-navbar.css">
+        <link rel="stylesheet" href="libs/css/style/header-custom.css"> 
+        <link rel="stylesheet" href="libs/css/style/navbar-custom.css">  
+        <link rel="stylesheet" href="libs/css/style/accordion-custom.css"> 
+        <link rel="stylesheet" href="libs/css/style/myStyle.css"> 
+        <link rel="stylesheet" href="libs/css/angular-toggle-switch/angular-toggle-switch-bootstrap-3.css"> 
+        <link rel="icon" href="data:;base64,=">
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.css" type="text/css" />-->
+
+    </head>
+    <body ng-app="saaApp">
+    <!-- Aquí se carga el contenido de la  página -->
+        <div>
+            <div ui-view></div>
+        </div>
+    </body>
+    <!-- carga de librerias -->
+    <script src="libs/angular/angular.js"></script>
+    <script src="libs/ui-router/angular-ui-router.js"></script>
+    <script src="libs/angular-ui-notification/angular-ui-notification.min.js"></script>
+    <script src="libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="libs/angular-dragdrop/angular-dragdrop.js"></script>
+    <script src="libs/angular-filter/angular-filter.min.js"></script>
+    <script src="libs/angular-toggle-switch/angular-toggle-switch.min.js"></script>
+
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script> -->  
+    <script src="libs/angular-ui-bootstrap/ui-bootstrap.js"></script>
+    <script src="libs/angular-ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="libs/angular-ui-navbar/ui-navbar.min.js"></script>
+
+    <!-- Carga app en angular -->
+    <script src="./app.js"></script>
+
+    <!--Caga de controladores-->
+    <script src="common/controllers/modal-instance.js"></script>
+    <script src="common/controllers/navigation.js"></script>
+    <script src="common/controllers/logout.js"></script>
+    <script src="login/controllers/login.js"></script>
+    <script src="usuarios/controllers/gestionar-usuarios.js"></script>
+    <script src="usuarios/controllers/PasswordController.js"></script>
+    <script src="dependencias/controllers/gestionar-dependencias.js"></script>
+    <script src="funcionarios/controllers/nuevo-funcionario.js"></script>
+    <script src="funcionarios/controllers/gestion-funcionario.js"></script>
+    <script src="funcionarios/controllers/ver-funcionario.js"></script>
+    <script src="funcionarios/controllers/actualizar-funcionario.js"></script>
+    <script src="plazas/controllers/nueva-plaza.js"></script>
+    <script src="plazas/controllers/gestion-plaza.js"></script>
+    <script src="plazas/controllers/ver-plaza.js"></script>
+    <script src="plazas/controllers/actualizar-plaza.js"></script>
+    <script src="funcionario-dependencia/controllers/fun-dep.js"></script>
+    <script src="plaza-dependencia/controllers/asignacion.js"></script>
+    <script src="plaza-dependencia/controllers/plaza-dependencia.js"></script>
+
+
+    <!--Caga de servicios-->
+    <script src="common/services/request-service.js"></script>
+    <script src="common/services/notification-service.js"></script>
+    <script src="common/services/message-handler-service.js"></script>
+    <script src="common/services/share-session-service.js"></script>
+    <script src="common/services/share-funcionario-service.js"></script>
+    <script src="common/services/share-plaza-service.js"></script>
+    <script src="common/services/confirmation-modal-service.js"></script>
+    <script src="common/services/user-service.js"></script>
+    <script src="login/services/LoginService.js"></script>
+    <script src="usuarios/services/UsuarioService.js"></script>
+    <script src="usuarios/services/PasswordService.js"></script>
+    <script src="dependencias/services/DependenciaService.js"></script>
+    <script src="funcionarios/services/antecedentes-funcionario.js"></script>
+    <script src="funcionarios/services/info-academica-funcionario.js"></script>
+    <script src="funcionarios/services/funcionario.js"></script>
+    <script src="plazas/services/PlazaService.js"></script>
+    <script src="funcionario-dependencia/services/funDepService.js"></script>
+    <script src="plaza-dependencia/services/asignacionService.js"></script>
+    <script src="plaza-dependencia/services/plazaDependenciaService.js"></script>
+</html>

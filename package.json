@@ -1,0 +1,27 @@
+{
+  "name": "saa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "saaApi.js",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "mysql2": "^1.2.0",
+    "node": "0.0.0",
+    "validator": "^7.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuisJavierRT/SAA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuisJavierRT/SAA/issues"
+  },
+  "homepage": "https://github.com/LuisJavierRT/SAA#readme"
+}

@@ -1,0 +1,99 @@
+<div> 
+    <ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plazas</li>
+        <li class="active">Ver plaza</li>
+    </ol> 
+    <div class="container">
+        <h4>Datos de la Plaza</h4>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table id ="plazasTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>ID</th>
+                            <th>Fecha Registro</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <tr>
+                            <td>{{plaza.descripcion}}</td>   
+                            <td>{{plaza.id}}</td>
+                            <td>{{plaza.fechaRegistro | date: 'dd-MM-yyyy'}}</td>
+                            <td>{{plaza.activo}}</td>
+                        </tr>           
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h4>Caracteristicas de la Plaza</h4>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table id ="plazasTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Fecha Autorización Inicial</th>
+                            <th>Fecha Autorización Final</th>
+                            <th>Jornada(%)</th>
+                            <th>Período(Meses)</th>
+                            <th>TCE</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <tr>
+                            <td>{{plaza.codigo}}</td>
+                            <td>{{plaza.tipo}}</td> 
+                            <td>{{plaza.fechaAutorizacionInicio | date: 'dd-MM-yyyy'}}</td>  
+                            <td>{{plaza.fechaAutorizacionFinal | date: 'dd-MM-yyyy'}}</td> 
+                            <td>{{plaza.jornada}}</td> 
+                            <td>{{plaza.periodo}}</td>   
+                            <td>{{plaza.tce}}</td>
+                        </tr>             
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id ="plazasTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Número de Sesión</th>
+                                <th>Articulo</th>
+                                <th>Fecha de Acuerdo</th>
+                                <th>Puesto</th>
+                                <th>Categoría</th>
+                                <th>Programa</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr>
+                                <td>{{plaza.numeroSesion}}</td>
+                                <td>{{plaza.articulo}}</td>
+                                <td>{{plaza.fechaAcuerdo | date: 'dd-MM-yyyy'}}</td>
+                                <td>{{plaza.puesto}}</td>
+                                <td>{{plaza.categoria}}</td>
+                                <td>{{plaza.programa}}</td>  
+                            </tr>         
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+       </div>
+    </div>
+    <div>
+        <div class="container">
+            <button class="btn btn-primary" ng-click="sendToPlazasView()">Regresar</button> 
+            <br></br>
+       </div>
+    </div>
+    <br></br>
+</div>

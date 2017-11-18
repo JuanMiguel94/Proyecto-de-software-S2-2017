@@ -1,0 +1,147 @@
+<div>
+    <ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administración</li>
+        <li class="active">Asignar plaza a dependencia</li>
+    </ol> 
+    <div class="container">
+          <script type="text/ng-template" id="asignacionPlazaDependenciaTemplate.html">
+              <div class="modal-header">
+                  <h3 class="modal-title">Nueva asignación</h3>
+              </div>
+              <div>
+                  <table class="table" style="float: left;">
+                      <tbody>
+                          <tr>
+                            <td><label>Dependencia</label></td>
+                            <td><label>{{dependencia.nombre}}</label></td>
+                          </tr>
+                          <tr>
+                            <td><label>Plaza</label></td>
+                            <td><label>{{plaza.codigo}}</label></td>
+                          </tr>
+                          <tr>
+                            <td><label>Jornada</label></td>
+                            <td><label>{{plaza.jornada}}% </label></td>
+                          </tr>
+                          <tr>
+                            <td><label>Tipo de asignación</label></td>
+                            <td><div toggle-switch class="switch-small switch-primary" on-label="Indefinida" off-label="Definida" ng-model="undefinedAssignment" ng-change="updateAssignmentType(undefinedAssignment)"></div></td>
+                          </tr>
+                          <tr>
+                            <td class=" col-xs-1">
+                              <label><span>Porcentaje a asignar</span></label>
+                            </td>
+                            <td class=" col-xs-1">
+                              <input type="number" class="form-control" ng-model="assigment.jornada" ng-readonly="false" uib-tooltip="porcentaje a asignar" ng-change="checkAvailability()">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class=" col-xs-1">
+                              <label><span>Descripción</span></label>
+                            </td>
+                            <td class=" col-xs-1">
+                              <input type="text" class="form-control" ng-model="assigment.descripcion" ng-readonly="false" uib-tooltip="descripcion">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class=" col-xs-1">
+                              <label><span>Fecha inicio</label>
+                            </td>
+                            <td class=" col-xs-2">
+                            <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" min-date="plaza.fechaAutorizacionInicio" 
+                                            max-date="plaza.fechaAutorizacionFinal" ng-model="assigment.fechaInicio" is-open="showStartDate" 
+                                            date-disabled="false" show-button-bar="false" ng-readonly="true" uib-tooltip="fecha inicio"
+                                             ng-change="checkStartDate()"/>
+                                    <span class="input-group-btn" style="white-space: nowrap"> 
+                                      <button type="button" class="btn btn-default" ng-click="openStartDatePickerPopUp()" uib-tooltip="seleccionar fecha inicio"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                  </p>
+                              </td>
+                          </tr>
+                          <tr ng-show="!undefinedAssignment">
+                              <td class=" col-xs-1">
+                                <label><span>Fecha final</span></label>
+                              </td>
+                              <td class=" col-xs-2">
+                                  <p class="input-group">
+                                      <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" min-date="plaza.fechaAutorizacionInicio"
+                                              max-date="plaza.fechaAutorizacionFinal" ng-model="assigment.fechaFinal" is-open="showEndDate"
+                                              date-disabled="false" show-button-bar="false" ng-readonly="true" uib-tooltip="fecha final" 
+                                              ng-change="checkEndDate()"/>
+                                      <span class="input-group-btn"> 
+                                        <button type="button" class="btn btn-default" ng-click="openEndDatePickerPopUp()" uib-tooltip="seleccionar fecha final"><i class="glyphicon glyphicon-calendar"></i></button>
+                                      </span>
+                                  </p>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-sm" ng-click="ok()" ><i class="glyphicon glyphicon-ok"></i> Asignar</button> 
+                <button class="btn btn-warning btn-sm" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+            </div>
+        </script>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Plazas</th>
+                    <th>Dependencias</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <uib-accordion close-others="false">
+
+                                <uib-accordion-group  ng-repeat="plaza in plazaList" is-open="false" panel-class="panel-primary" data-drag="true" 
+                                  data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" 
+                                  jqyoui-draggable="{animate:true, onStart:'dragCallback(plaza)'}"
+                                  ng-if="plaza.jornada > 0">
+                                  <uib-accordion-heading>
+                                      <i class="glyphicon glyphicon-th-large"></i> {{ plaza.codigo}}
+                                  </uib-accordion-heading>
+
+                                  Tipo: {{plaza.tipo}}
+                                  <br>
+                                  Jornada: {{plaza.jornada}}%
+                                </ui-baccordion-group>
+                                
+                            </uib-accordion>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <uib-accordion close-others="false">
+
+                              <uib-accordion-group  ng-repeat="depen in dependenciaList" is-open="false" panel-class="panel-primary" data-drop="true" jqyoui-droppable="{onDrop:'dropCallback(depen)'}">
+                                <uib-accordion-heading>
+                                  <i class="glyphicon glyphicon-folder-open"></i>  {{depen.codigo}} - {{depen.nombre}}
+                                </uib-accordion-heading>
+                                
+                              </ui-baccordion-group>
+                            
+                              <uib-accordion-group ng-repeat="plazas in depen.plazas" is-open="false" panel-class="panel-primary" qyoui-droppable="{onDrop:'dropCallback(depen)'}">
+                                <uib-accordion-heading>
+                                  <i class="glyphicon glyphicon-th-large"></i>  {{plazas.codigo}}
+                                </uib-accordion-heading>
+
+                                Tipo: {{plazas.tipo}}
+                                <br>
+                                Porcentaje Asignado: {{plazas.porcentajeAcordado}} %
+                                <br>
+                                Fecha Inicio: {{plazas.fechaInicio | date: 'dd-MM-yyyy'}}
+                                <br>
+                                Fecha Final: {{plazas.fechaFinal | date: 'dd-MM-yyyy'}}  
+                              </ui-baccordion-group>
+                            
+                            </uib-accordion> 
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

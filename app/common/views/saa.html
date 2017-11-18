@@ -1,0 +1,62 @@
+<div class="ui-base">
+	<div class="header-custom">
+		<h2>Sistema de Apoyo Administrativo</h2>
+	</div>
+
+	<!-- BEGIN NAVIGATION -->
+	<div ng-controller="NavegacionCtrl">
+	    <nav class="navbar navbar-default navbar-custom" role="navigation">
+	    	<div class="container-fluid">
+		        <div class="collapse navbar-collapse " ng-class="!navCollapsed && 'in'">
+
+		            <ul class="nav navbar-nav">
+		                <li uib-dropdown>
+		                    <a uib-dropdown-toggle>
+		                        Plazas
+		                        <b class='caret'></b>
+		                    </a>
+		                    <tree tree='plazas'></tree>
+		                </li>
+		                <li uib-dropdown>
+		                    <a uib-dropdown-toggle>
+		                        Dependencias
+		                        <b class='caret'></b>
+		                    </a>
+		                    <tree tree='dependencias'></tree>
+		                </li>     
+		                <li uib-dropdown>
+		                    <a uib-dropdown-toggle>
+		                        Funcionarios
+		                        <b class='caret'></b>
+		                    </a>
+		                    <tree tree='funcionarios'></tree>
+		                </li>
+		                <li uib-dropdown>
+		                    <a uib-dropdown-toggle>
+		                        Administración
+		                        <b class='caret'></b>
+		                    </a>
+		                    <tree tree='administracion'></tree>
+		                </li>
+		            </ul>
+		            <ul class="nav navbar-nav navbar-right" class="list-group">
+		                <li uib-dropdown>
+		                    <a uib-dropdown-toggle>
+		                    	<i class="glyphicon glyphicon-user"></i>
+		                        {{username}}
+		                        <b class='caret'></b>
+		                    </a>
+		                    <tree tree='sesion'></tree>
+		                </li>
+		            </ul>
+		        </div>
+	        </div>
+	        <!-- /.navbar-collapse -->
+	    </nav>
+	</div>
+	<!-- END NAVIGATION -->
+
+	<div class="ui-base">
+		<div ui-view />
+	</div>
+</div>

@@ -1,0 +1,59 @@
+<div>
+    <ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Funcionario</li>
+        <li class="active">Buscar funcionario</li>
+    </ol> 
+    <div class="container">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+            <input class="form-control" type="text" placeholder="Inserte una palabra para filtrar los resultados" required ng-model="mdlTag"></input>
+            <span class="input-group-addon">
+                Resultados: <span class="badge">{{filters.length}}</span>
+            </span>
+        </div> 
+        <br></br>  
+    </div>           
+    <div>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <script type="text/ng-template" id="confirmationModalTemplate.html">
+                        <div class="modal-header">
+                            <h3 class="modal-title">{{modalContent.title}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{modalContent.message}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" ng-click="ok()">Confirmar</button>
+                            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancelar</button>
+                        </div>
+                    </script>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Funcionario</th>
+                                <th>&nbsp;</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="func in filters=(funcionarioList | filter:mdlTag)">
+                                <td>{{func.nombre}} {{func.apellido1}} {{func.apellido2}}</td>
+                                
+                                <td style="white-space: nowrap">
+                                    <button class="btn btn-primary btn-xs"  uib-tooltip="visualizar" ng-click="sendToFuncionarioView(func.id)"><span class="glyphicon glyphicon-eye-open"></span></button>
+                                    <button class="btn btn-warning btn-xs"  uib-tooltip="editar" ng-click="sendToUpdateFuncionarioView(func.id)"><span class="glyphicon glyphicon-pencil">
+                                    </button>
+                                    <button class="btn btn-danger btn-xs"  uib-tooltip="desactivar" ng-click="disableFuncionario(func.id)"><span class="glyphicon glyphicon-trash">
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>   
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>

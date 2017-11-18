@@ -1,0 +1,46 @@
+.ng-autocomplete-input {
+	outline: none;
+}
+
+.ng-autocomplete-holder {
+	position: absolute;
+	border: 1px solid #d4d4d4;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	background: #fff;
+}
+
+.ng-autocomplete-holder > .ng-autocomplete-result {
+	display: block;
+	padding: 3px;
+	cursor: pointer;
+}
+
+.ng-autocomplete-holder > .ng-autocomplete-result > span {
+	display: block;
+}
+
+.ng-autocomplete-holder > .ng-autocomplete-result > span.ng-autocomplete-result-title {
+	font-size: 14px;
+}
+
+.ng-autocomplete-holder > .ng-autocomplete-result > span.ng-autocomplete-result-description {
+	font-size: 12px;
+}
+
+.ng-autocomplete-holder > .ng-autocomplete-result.hover {
+	color: #fff;
+	background: #f2f2f2;
+}
+
+.ng-autocomplete-holder.red > .ng-autocomplete-result.hover {
+	background: #ff5c5b;
+}
+
+.ng-autocomplete-holder.green > .ng-autocomplete-result.hover {
+	background: #8dc63f;
+}
+
+.ng-autocomplete-holder.blue > .ng-autocomplete-result.hover {
+	background: #3399FF;
+}

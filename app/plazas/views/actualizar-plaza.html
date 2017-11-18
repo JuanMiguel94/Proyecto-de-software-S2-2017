@@ -1,0 +1,179 @@
+<div>
+	<ol class="breadcrumb">
+        <li class="active">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plazas</li>
+        <li class="active">Actualizar Plaza</li>
+    </ol>
+    <div>
+        <div class="container">
+            <h4>Datos de la Plaza</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form name="descriptionForm" novalidate>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>ID</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Activo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <textarea class="form-control" type="text" align="justify" uib-tooltip="Atributo Único" placeholder="Descripción" ng-model="plaza.descripcion" required></textarea>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" ng-readonly="true" required ng-model="plaza.id" required>
+                                    </td> 
+                                    <td>
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{dateSettings.dateFormat}}" ng-model="plaza.fechaRegistro" ng-readonly="true"/>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" ng-readonly="true" required ng-model="plaza.activo" required>
+                                    </td> 
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div>
+    	<div class="container"> 
+        <h4>Caracteristicas de la Plaza</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form name="plazaForm" novalidate>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Autorización Inicial</th>
+                                    <th>Fecha Autorización Final</th>
+                                    <th>Jornada(%)</th>
+                                    <th>Período(Meses)</th>
+                                    <th>TCE</th>
+                                </tr>
+                            </thead>
+                            <tbody> 
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="CX0000" required ng-model="plaza.codigo" required>
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" ng-model="plaza.tipo">
+                                            <option value="" disabled selected>Tipo</option>
+                                            <option ng-repeat="type in typeList">{{type}}</option>
+                                        </select> 
+                                    </td> 
+                                     
+                                    <td class="col-xs-2">
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{dateSettings.dateFormat}}" ng-model="plaza.fechaAutorizacionInicio" is-open="dateSettings.showRegDate"  date-disabled="false" close-text="Cerrar" current-text="Hoy" ng-readonly="true"/>
+                                            <span class="input-group-btn"> 
+                                                <button type="button" class="btn btn-default" ng-click="openRegDatePickerPopUp()">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td  class="col-xs-2" >
+                                        <p class="input-group" ng-hide="plaza.tipo == 'CF' || plaza.tipo == 'NT'">
+                                          <input type="text" class="form-control" uib-datepicker-popup="{{dateSettings.dateFormat}}" min-date="plaza.fechaAutorizacionInicio" ng-model="plaza.fechaAutorizacionFinal" is-open="dateSettings.showEndDate"  date-disabled="false" current-text="Hoy" close-text="Cerrar" ng-readonly="true"/>
+                                          <span class="input-group-btn"> 
+                                            <button type="button" class="btn btn-default" ng-click="openEndDatePickerPopUp()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                          </span>
+                                        </p>
+                                        <input type="text" class="form-control" value="Indefinida" ng-readonly="true" ng-show="plaza.tipo == 'CF' || plaza.tipo == 'NT'"/>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" placeholder="Jornada" ng-blur= "setTCE()" ng-model="plaza.jornada" required></input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" placeholder="Período" ng-blur= "setTCE()" required ng-model="plaza.periodo" required>
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" ng-readonly= "true" placeholder="TCE" required ng-model="plaza.tce" required>
+                                        </input>
+                                    </td>
+                                </tr>             
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form name="plazaForm2" novalidate>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Número de Sesión</th>
+                                    <th>Articulo</th>
+                                    <th>Fecha de Acuerdo</th>
+                                    <th>Puesto</th>
+                                    <th>Categoría</th>
+                                    <th>Programa</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="text" placeholder="Número de Sesión" ng-model="plaza.numeroSesion" required ></input>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" placeholder="Artículo" ng-model="plaza.articulo" required ></input>
+                                    </td>
+
+                                    
+                                    <td class="col-xs-2" >
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{dateSettings.dateFormat}}" ng-model="plaza.fechaAcuerdo" is-open="dateSettings.showAgreDate"  date-disabled="false" close-text="Cerrar" ng-readonly="true"/>
+                                            <span class="input-group-btn"> 
+                                                <button type="button" class="btn btn-default" ng-click="openAgreDatePickerPopUp()">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td>     
+                                        <select class="form-control" ng-model="plaza.puesto" ng-selected="plaza.puesto" ng-change="setCategoria(plaza.puesto)">
+                                            <option value="" disabled selected>Puesto</option>
+                                            <option ng-repeat="puesto in puestoList">{{puesto.puesto}}</option>
+                                        </select> 
+                                    </td> 
+                                    <td>
+                                        <input class="form-control" type="number" ng-readonly= "true" placeholder="Categoria" required ng-model="plaza.categoria">
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" ng-model="plaza.programa">
+                                            <option value="" disabled selected>Programa</option>
+                                            <option ng-repeat="prog in progList">{{prog}}</option>
+                                        </select>
+                                    </td>
+                                </tr>         
+                            </tbody>
+                        </table>
+                    </form>   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <button class="btn btn-primary center-block" ng-click="validatedPlaza(descriptionForm.$valid, plazaForm.$valid, plazaForm2.$valid, plaza)">Actualizar Plaza</button> 
+            <br></br>
+       </div>
+    </div>
+</div>
