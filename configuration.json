@@ -4,7 +4,7 @@
 	"params"     : {
 		"host"     : "localhost",
 		"user"     : "root",
-		"password" : "12345",
+		"password" : "abcd1234",
 		"database" : "mydb"
 	}  
 }

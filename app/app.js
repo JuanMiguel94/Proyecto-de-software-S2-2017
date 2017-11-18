@@ -115,6 +115,11 @@
           parent: 'saa',
           templateUrl: 'plaza-dependencia/views/plaza-dependencia.html',
           controller: 'PlazaDependenciaCtrl'
+        }).state('reportes', {
+          url: '/reportes',
+          parent: 'saa',
+          templateUrl: 'reportes/views/reportes.html',
+          controller: 'ReportesCtrl'
         })
     })
 

@@ -58,6 +58,12 @@
                     link: "asignar-plaza-dependencia"
                 }
             ];
+            $scope.reportes = [
+                {
+                    name: "Reportes",
+                    link: "reportes"
+                }
+            ];
                     
             $scope.sesion = [
                 {
