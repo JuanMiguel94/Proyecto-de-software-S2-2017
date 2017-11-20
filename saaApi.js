@@ -1,7 +1,9 @@
 var express       = require('express'),
     app           = express(),
+    parser        = require('./businessLogic/reportParser.js') 
     server        = require('http').createServer(app),
     bodyParser    = require('body-parser'),
+    io = require('socket.io')(server),
     sessionController     = require('./controllers/sessionController.js'),
     userController = require('./controllers/userController.js'),
     dependencyController = require('./controllers/dependencyController.js'),
@@ -9,6 +11,14 @@ var express       = require('express'),
     plazaController = require('./controllers/plazaController.js'),
     funDepController = require('./controllers/funDepController.js');
     plazaDependenciaController = require('./controllers/plazaDependenciaController');
+
+//socket config
+io.on('connection', function (socket) {
+    console.log('Alguien se ha conectado con sockets')
+    socket.on('database-feed', (data) => {        
+        parser.parse(data)
+    })
+})
 
 
 app.use(bodyParser.urlencoded({
