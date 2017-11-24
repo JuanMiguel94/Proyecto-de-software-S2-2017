@@ -1,6 +1,7 @@
 var express       = require('express'),
     app           = express(),
     parser        = require('./businessLogic/reportParser.js') 
+    databaseFeedService = require('./businessLogic/databaseFeedService.js')
     server        = require('http').createServer(app),
     bodyParser    = require('body-parser'),
     io = require('socket.io')(server),
@@ -16,7 +17,8 @@ var express       = require('express'),
 io.on('connection', function (socket) {
     console.log('Alguien se ha conectado con sockets')
     socket.on('database-feed', (data) => {        
-        parser.parse(data)
+        //parser.parse(data)
+        databaseFeedService.foo()
     })
 })
 

@@ -235,5 +235,38 @@ exports.disableDependency = function(data, callback){
                 data: {}
             });
         }
-    });   
+    });
 };
+exports.addDependencyReporte = function(data, callback){
+    var paramsString = '\"' + data.codigo + '\"' + ',' + '\"' + data.nombre + '\"';
+    repository.executeQuery({
+        spName: 'sp_agregarDependenciaReporte',
+        params: paramsString
+    }, 
+    function(success, dataQuery) {
+        if(success) {
+            var paramsString2 = '\"' + data.usuario + '\"' + ',' + '\"' + dataQuery[0][0].idD + '\"' + ',' + '\"' + 'i' + '\"';
+            repository.executeQuery({
+                spName: 'sp_historialGestionDependencia',
+                params:  paramsString2
+            },
+            function(success2, data2) {
+                callback(
+                {
+                    success: true,
+                    data: null,
+                    message: "La dependencia se agregó correctamente"
+                });
+            });
+        } 
+        else 
+        {
+            callback(
+            {
+                success: false,
+                data: null,
+                message: "Por favor asegúrese de que el codigo o nombre ingresado no está en uso"
+            });
+        }
+    }); 
+};  

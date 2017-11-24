@@ -47,8 +47,8 @@ create table `mydb`.`Funcionario` (
   `apellido1` VARCHAR(60) NOT NULL,
   `apellido2` VARCHAR(60) NOT NULL,
   `activo` BIT NOT NULL DEFAULT 1,
-  `fechaNacimiento` DATETIME NOT NULL,
-  `areaEspecialidad` VARCHAR(60) NOT NULL,
+  `fechaNacimiento` DATETIME ,
+  `areaEspecialidad` VARCHAR(60),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -70,7 +70,7 @@ ENGINE = InnoDB;
 
 create table `mydb`.`Dependencia` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `codigo` VARCHAR(10) NOT NULL, 
+  `codigo` VARCHAR(10), 
   `nombre` VARCHAR(60) NOT NULL,
   `activo` BIT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`))
@@ -159,8 +159,8 @@ ENGINE = InnoDB;
 
 create table `mydb`.`Plaza` (   
   `id` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(200) NOT NULL, 
-  `fechaRegistro` DATETIME NOT NULL,
+  `descripcion` VARCHAR(200), 
+  `fechaRegistro` DATETIME,
   `activo` BIT NOT NULL DEFAULT 1,
   
   PRIMARY KEY (`id`))
@@ -174,9 +174,9 @@ ENGINE = InnoDB;
 
 create table `mydb`.`PuestosPlaza` ( 
 	`id` int not null auto_increment, 
-    `codigoPuesto` int not null, 
+    `codigoPuesto` int, 
     `puesto` varchar(100) not null,
-	`idCategoria` int not null,
+	`idCategoria` int,
     primary key(`id`),
     CONSTRAINT `fk_categoria_puesto`
 		FOREIGN KEY (`idCategoria`)
@@ -188,19 +188,19 @@ create table `mydb`.`CaracteristicaPlaza` (
   `idPlaza` INT NOT NULL, 
   `codigo` VARCHAR(8) NOT NULL,
   `periodo` DOUBLE NOT NULL,
-  `programa` INT NOT NULL,
+  `programa` INT,
   `tipo` VARCHAR(6) NOT NULL,
   `categoria` INT NOT NULL,   	
   `tce` DOUBLE NOT NULL,
   `activo` BIT NOT NULL DEFAULT 1,
-  `idPuesto` int NOT NULL, 
+  `idPuesto` int, 
   `jornada` INT NOT NULL,
   `asignacionDependencia` BIT NOT NULL DEFAULT 0,
   `fechaAutorizacionInicio` DATETIME NOT NULL,
   `fechaAutorizacionFinal` DATETIME,
-  `articulo` INT NOT NULL, 
-  `numeroSesion` VARCHAR(35) NOT NULL,
-  `fechaAcuerdo` DATETIME NOT NULL,
+  `articulo` INT, 
+  `numeroSesion` VARCHAR(35),
+  `fechaAcuerdo` DATETIME,
   
   PRIMARY KEY (`id`,`idPlaza`),
   

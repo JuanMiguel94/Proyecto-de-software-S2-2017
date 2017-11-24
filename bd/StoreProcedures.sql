@@ -300,6 +300,23 @@ begin
 	end if;
     select idD;
 end $$
+delimiter ;
+
+delimiter $$
+create procedure sp_agregarDependenciaReporte (
+
+	 in _codigo varchar(10), 
+	 in _nombre varchar(60) 
+)
+begin 
+	declare idD int;
+    
+    insert into Dependencia (codigo, nombre)
+    values (_codigo, _nombre);
+    set idD = (select max(id) from Dependencia);
+	
+    select idD;
+end $$
 delimiter ;  
 
 delimiter $$

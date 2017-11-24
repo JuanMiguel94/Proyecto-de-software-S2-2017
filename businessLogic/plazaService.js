@@ -61,6 +61,57 @@ exports.addPlaza = function(data, callback){
     });        
 };
 
+exports.addPlazaReporte = function(data, callback){
+    data.fechaAutorizacionInicio = formatDateFromJSToMySQL(data.fechaAutorizacionInicio);
+    if (data.fechaAutorizacionFinal != ""){
+        data.fechaAutorizacionFinal = formatDateFromJSToMySQL(data.fechaAutorizacionFinal);
+    }
+    
+    var sp_params = "\"" + data.descripcion + "\"," + "\"" + data.codigo + "\"";
+    repository.executeQuery({
+        spName: 'sp_agregarPlaza',
+        params: sp_params
+    }, 
+    function(success, dataQuery) {
+        if(success) {
+        	if(dataQuery[0][0].valid == 0) {
+        		callback(
+	            {
+	                success: false,
+	                message: "Ya existe una plaza con ese código",
+	                data: null
+	            });
+        	}
+            else{
+                var paramsString2 = '\"'+data.usuarioActual+'\"'+','+
+                                        dataQuery[0][0].valid+','+ '\"' + 'i' + '\"';
+                repository.executeQuery({
+                    spName:  'sp_historialGestionPlaza',
+                    params: paramsString2
+                }, 
+                function(success2, data2) {
+                    callback({
+                        success: true, 
+                        message: "La plaza se agregó correctamente",
+                        data: dataQuery[0][0].valid
+                    });
+                });
+                
+
+            }
+        } 
+        else 
+        {
+        	callback(
+            {
+                success: false,
+                data: null,
+                message: "No se pudo agregar la plaza, por favor verifique todos los campos"
+            });
+        }
+    });        
+};
+
 exports.addPlazaInfo = function(data, callback) {
     var sp_params = "";
     data.fechaAcuerdo = formatDateFromJSToMySQL(data.fechaAcuerdo);
