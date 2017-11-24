@@ -1,6 +1,8 @@
 const plazaServie = require("./plazaService")
 const funcionarioService = require("./funcionarioService")
 const dependencyService = require("./dependencyService")
+const funDepService = require("./funDepService")
+const plazaDependenciaService = require("./plazaDependenciaService")
 
 var plazaInfo = {
     usuarioActual: "user",
@@ -35,7 +37,26 @@ var funcionarioInfo = {
 var dependencyInfo = {
     usuario: "user",
     codigo: null,
-    nombre: "nombre_de_dependencia2"
+    nombre: "nombre_de_dependencia"
+}
+var funDepInfo = {
+    usuario: "user",
+    idFuncionario: 1,
+    idDependencia: "1"
+}
+
+var plazaDependeciaInfo = {
+    fechaInicio:  new Date(20, 11, 2016),
+    fechaFinal:  new Date(20, 11, 2016),
+    indefinida: 0,
+    porcentajeAsignado: 100,
+    descripcion: "descripcion corta",
+    codigo: "HH5223",
+    tipo: "BM",
+    jornada: 5,
+    usuario: "user",
+    idPlaza: 1,
+    idDependencia: 1
 }
 
 exports.foo = () => {
@@ -57,7 +78,9 @@ exports.foo = () => {
         console.log(res)
         return res
     })
-*/
     dependencyService.addDependencyReporte(dependencyInfo, res => 
         console.log(res))
+  */
+  //funDepService.assignFunDep(funDepInfo, res => console.log(res))
+  plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => console.log(res))
 }
