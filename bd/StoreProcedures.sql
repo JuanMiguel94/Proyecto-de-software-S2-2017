@@ -743,8 +743,8 @@ create procedure sp_agregarContrato (
     in _porcentajeLiberado int
 )
 begin
-	insert into Contrato (idContratoLiberado, idDependencia, idFuncionario, activo, actividad, descripcion, anno, fechaInicio, fechaFinal, numeroConcurso, suplencia, porqueContratacion, quienNombro, puestoQuienNombro, porcentajeTotalContratacion, porcentajeLiberado)
-    values (_idContratoLiberado, _idDependencia, _idFuncionario, _activo, _actividad, _descripcion, _anno, _fechaInicio, _fechaFinal, _numeroConcurso, _suplencia, _porqueContratacion, _quienNombro, _puestoQuienNombro, _porcentajeTotalContratacion, _porcentajeLiberado);
+	insert into Contrato (idContratoLiberado, idDependencia, idFuncionario, activo, actividad, descripcion, anno, fechaInicio, fechaFinal, númeroConcurso, suplencia, porqueContratacion, quienNombro, puestoQuienNombro, porcentajeTotalContratacion, porcentajeLiberado)
+    values (_idContratoLiberado, _idDependencia, _idFuncionario, _activo, _actividad, _descripcion, _anno, _fechaInicio, _fechaFinal, _númeroConcurso, _suplencia, _porqueContratacion, _quienNombro, _puestoQuienNombro, _porcentajeTotalContratacion, _porcentajeLiberado);
 end $$
 delimiter ;
 

@@ -3,6 +3,7 @@ const funcionarioService = require("./funcionarioService")
 const dependencyService = require("./dependencyService")
 const funDepService = require("./funDepService")
 const plazaDependenciaService = require("./plazaDependenciaService")
+const contratoService = require("./contratroService")
 
 var plazaInfo = {
     usuarioActual: "user",
@@ -59,8 +60,27 @@ var plazaDependeciaInfo = {
     idDependencia: 1
 }
 
+var contratoInfo = {
+    idContratoLiberado: null,
+    idDependencia: 1,
+    idFuncionario: 1,
+    activo: 1,
+    actividad: null,
+    porqueContratacion: null,
+    quienNombro: null,
+    puestoQuienNombro: null,
+    porcentajeTotalContratacion: 100,
+    descripcion: "descripcion",
+    anno: 2017,
+    fechaInicio: new Date(20, 11, 2016),
+    fechaFinal: new Date(20, 11, 2016),
+    numeroConcurso: null,
+    suplencia: null,                   
+    porcentajeLiberado: null
+}
+
 exports.foo = () => {
-    /*
+    /* 
     agregarPlaza = new Promise((resolve, reject)=>{
         plazaServie.addPlazaReporte(plazaInfo, res => {
             console.log("res.data", res.data)
@@ -72,15 +92,16 @@ exports.foo = () => {
         plazaInfo.idPlaza = idPlaza
         plazaServie.addPlazaInfo(plazaInfo, res => console.log(res))
     })
-*/
-/*
-    funcionarioService.createFuncionario(funcionarioInfo, (res) => {
+    */
+  /*  funcionarioService.createFuncionario(funcionarioInfo, (res) => {
         console.log(res)
         return res
     })
     dependencyService.addDependencyReporte(dependencyInfo, res => 
         console.log(res))
-  */
-  //funDepService.assignFunDep(funDepInfo, res => console.log(res))
+  
+  funDepService.assignFunDep(funDepInfo, res => console.log(res))
   plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => console.log(res))
+  */
+  contratoService.addContrato(contratoInfo, res => console.log(res))
 }
