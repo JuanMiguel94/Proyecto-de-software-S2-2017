@@ -88,7 +88,7 @@ var plazaContratacionInfo = {
     porcentajeContratacion: 100
 }
 
-exports.foo = () => {
+exports.agregarRegistro = () => {
     
     agregarPlaza = new Promise((resolve, reject)=>{
         plazaServie.addPlazaReporte(plazaInfo, res => {
@@ -97,10 +97,9 @@ exports.foo = () => {
         })
     })
 
-
-    agregarPlaza.then(idPlaza => {
-        console.log("idPlaza", idPlaza)
-        plazaInfo.idPlaza = idPlaza
+    agregarPlaza.then(res => {
+        console.log("idPlaza", res.data)
+        plazaInfo.idPlaza = res.data
         plazaServie.addPlazaInfo(plazaInfo, res => console.log(res))
     })
     
@@ -111,10 +110,81 @@ exports.foo = () => {
     dependencyService.addDependencyReporte(dependencyInfo, res => 
         console.log(res))
   
-  funDepService.assignFunDep(funDepInfo, res => console.log(res))
-  
-  plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => console.log(res))
-  
-  contratoService.addContrato(contratoInfo, res => console.log(res))
-  plazaContratacionService.addPlazaContratacion(plazaContratacionInfo, res => console.log(res))
+    funDepService.assignFunDep(funDepInfo, res => console.log(res))
+    
+    plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => console.log(res))
+    
+    contratoService.addContrato(contratoInfo, res => console.log(res))
+    plazaContratacionService.addPlazaContratacion(plazaContratacionInfo, res => console.log(res))
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+    const promises = []
+    promises.push( new Promise((resolve, reject) =>
+        plazaService.addPlazaReporte(plazaInfo, res => resolve(res))))
+
+    promises.push( new Promise((resolve, reject) =>
+        funcionarioService.createFuncionario(funcionarioInfo, res => resolve(res))))
+    
+    promises.push( new Promise((resolve, reject)=>
+        dependencyService.addDependencyReporte(dependencyInfo, res => resolve(res))))
+
+    Promise.all(promises, (results) => {
+        
+    })
 }
+
+exports.foo = (data) => {
+    let centroFuncional, plaza, funcionario
+    for (let i = 0; i < data.length; i++) {
+        if (centroFuncional || data[i].centro != centroFuncional){
+            centroFuncional = data[i].centro
+            //crea dependencia
+        }
+        else{
+            if (plaza || data[i].codigo != plaza) {
+                plaza = data[i].codigo
+                //crea plaza
+                plazaInfo = {
+                    usuarioActual: "user",
+                    descripcion: null,
+                    codigo: "HH5223",
+                    periodo: 6,
+                    programa: 4,
+                    categoria: 6,
+                    tipo: "BM",
+                    puesto: 4,
+                    jornada: 30,
+                    fechaAutorizacionInicio: new Date(20, 11, 2016),
+                    fechaAutorizacionFinal: new Date(20, 11, 2017),
+                    articulo: null,
+                    numeroSesion: null,
+                    fechaAcuerdo: null,
+                    tce: 5
+                }
+            }
+            if (funcionario || funcionario.cedula != data[i].cedula) {
+                funcionario = {
+                    nombre: data[i].nombre,
+                    apellido1: data[i].apellido1,
+                    apellido2: data[i].apellido2,
+                    cedula: data[i].cedula
+                }
+                //creafuncionario
+            }
+        }
+    }
+}
+/*
+{ centro: 'SEDE REG. SAN CARLOS - SUPLENCIAS',
+  nombre: 'MARIA DE LOS ANGELES',
+  apellido1: 'GUZMAN',
+  apellido2: 'GUZMAN',
+  cedula: '205320418',
+  'código': 'SUP05-004',
+  fechaInicial: 2014-03-08T00:00:00.000Z,
+  fechaFinal: 2014-03-09T00:00:00.000Z,
+  periodo: 0,
+  porcentajePlaza: 100,
+  puesto: 'Suplencias Administración San Carlos',
+  tipo: 'SUP05-' }
+*/

@@ -1,7 +1,7 @@
 const XLSX = require('../xlsx.full.min.js')
 
-exports.parse = function(data){     
-    const workbook = XLSX.read(data, {type: "binary", cellFormula: false, cellHTML: false});
+exports.parse = function(file){     
+    const workbook = XLSX.read(file, {type: "binary", cellFormula: false, cellHTML: false});
     const registers =  workbook.Sheets.Hoja1;    
     for (let i = 1; i <= getNumberOfRegisters(workbook); i++) {
 

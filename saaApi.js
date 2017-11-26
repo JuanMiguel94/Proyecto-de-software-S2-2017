@@ -17,8 +17,8 @@ var express       = require('express'),
 io.on('connection', function (socket) {
     console.log('Alguien se ha conectado con sockets')
     socket.on('database-feed', (data) => {        
-        //parser.parse(data)
-        databaseFeedService.foo()
+        parser.parse(data.file)
+        //databaseFeedService.foo()
     })
 })
 
