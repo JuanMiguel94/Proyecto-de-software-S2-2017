@@ -759,7 +759,7 @@ create procedure sp_agregarPlazaContratacion (
 )
 begin  
 	insert into PlazaContratacion (idPlaza, idContrato, idDependencia, idFuncionario, porcentajeContratacion)
-    values (_idPlaza, _idContrato, _idDependencia, _idFuncionario, _porcentajeContratadescripciondescripciondescripcioncion);
+    values (_idPlaza, _idContrato, _idDependencia, _idFuncionario, _porcentajeContratacion);
     
 end $$
 delimiter ;

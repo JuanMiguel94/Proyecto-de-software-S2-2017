@@ -428,16 +428,11 @@ create table `mydb`.`PlazaContratacion` (
 	`idPlaza` int not null,
     `idContrato` int not null,
     `idDependencia` int not null,
-    `idFuncionario` int not null,
-    `idCaracteristicaPlaza` int not null,
+    `idFuncionario` int not null,    
     `porcentajeContratacion` int not null,
     
-    primary key (`idCaracteristicaPlaza`, `idPlaza`, `idContrato`, `idDependencia`, `idFuncionario`),
-    
-    constraint `fk_idCaracteristicaPlaza`
-		foreign key (`idCaracteristicaPlaza`, `idPlaza`)
-        references `mydb`.`CaracteristicaPlaza` (`id`, `idPlaza`),
-	
+    primary key (`idPlaza`, `idContrato`, `idDependencia`, `idFuncionario`),
+  
 	constraint `fk_idContrato`
 		foreign key (`idContrato`, `idDependencia`, `idFuncionario`)
         references `mydb`.`Contrato` (`id`, `idDependencia`, `idFuncionario`)
