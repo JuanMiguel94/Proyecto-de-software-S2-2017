@@ -16,9 +16,12 @@ var express       = require('express'),
 //socket config
 io.on('connection', function (socket) {
     console.log('Alguien se ha conectado con sockets')
-    socket.on('database-feed', (data) => {        
-        parser.parse(data.file)
-        //databaseFeedService.foo()
+    socket.on('database-feed', (data) => {               
+        //databaseFeedService.agregarRegistro()
+        parser.parse(data.file).then(reg => {            
+            databaseFeedService.foo3(data.user, reg)
+            //databaseFeedService.foo2(data.user, reg)
+        })        
     })
 })
 

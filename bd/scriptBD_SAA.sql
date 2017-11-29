@@ -42,10 +42,10 @@ ENGINE = InnoDB;
 
 create table `mydb`.`Funcionario` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `cedula` VARCHAR(11) NOT NULL, 
+  `cedula` VARCHAR(20) NOT NULL, 
   `nombre` VARCHAR(60) NOT NULL,
-  `apellido1` VARCHAR(60) NOT NULL,
-  `apellido2` VARCHAR(60) NOT NULL,
+  `apellido1` VARCHAR(60),
+  `apellido2` VARCHAR(60),
   `activo` BIT NOT NULL DEFAULT 1,
   `fechaNacimiento` DATETIME ,
   `areaEspecialidad` VARCHAR(60),
@@ -186,11 +186,11 @@ ENGINE = InnoDB;
 create table `mydb`.`CaracteristicaPlaza` ( 
   `id` INT NOT NULL AUTO_INCREMENT,
   `idPlaza` INT NOT NULL, 
-  `codigo` VARCHAR(8) NOT NULL,
+  `codigo` VARCHAR(18) NOT NULL,
   `periodo` DOUBLE NOT NULL,
   `programa` INT,
   `tipo` VARCHAR(6) NOT NULL,
-  `categoria` INT NOT NULL,   	
+  `categoria` INT,   	
   `tce` DOUBLE NOT NULL,
   `activo` BIT NOT NULL DEFAULT 1,
   `idPuesto` int, 
@@ -457,6 +457,7 @@ insert into CategoriasPlaza(categoria) values(14);
 insert into CategoriasPlaza(categoria) values(15);
 insert into CategoriasPlaza(categoria) values(16);
 insert into CategoriasPlaza(categoria) values(23);
+insert into CategoriasPlaza(categoria) values(-1);
 
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(110, 'Trabajador(a) en construcción y áreas verdes',1);
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(111, 'Auxiliar Académico (A) – Administrativo (A) 1',1);
@@ -531,3 +532,5 @@ insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(407, 'Profeso
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(430, 'Regente',15);
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(506, 'Rector (a)',15);
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(505, 'Vicerrector (a)',15);
+
+set global max_connections = 100000;

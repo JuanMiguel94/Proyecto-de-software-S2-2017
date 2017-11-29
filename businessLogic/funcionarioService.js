@@ -33,7 +33,7 @@ exports.createFuncionario = function(data, callback){
                 });
             }
             else{
-                var paramsString2 = '\"'+data.usuarioActual+'\"'+','+
+                var paramsString2 = '\"' + data.usuarioActual+'\",'+
                                         dataQuery[0][0].idF+','+ '\"' + 'i' + '\"';
                 repository.executeQuery({
                     spName:  'sp_historialGestionFuncionario',
@@ -41,7 +41,7 @@ exports.createFuncionario = function(data, callback){
                 },
                 function(success2, data2) {
                     callback({
-                        status: true, 
+                        status: success2, 
                         message: 'Se ha registrado la informacion del funcionario de manera exitosa',
                         data: dataQuery[0][0].idF
                     });
@@ -55,7 +55,7 @@ exports.createFuncionario = function(data, callback){
                 data: {}
             });
         }
-    });    
+    });  
 };
 
 exports.createAcademicInfo = function(data, callback){

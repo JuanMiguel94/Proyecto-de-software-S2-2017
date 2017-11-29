@@ -138,7 +138,7 @@ delimiter ;
 delimiter $$
 create procedure sp_agregarFuncionario (
 
-	in _cedula varchar(11), 
+	in _cedula varchar(20), 
 	in _nombre varchar(60),
 	in _apellido1 VARCHAR(60),
 	in _apellido2 VARCHAR(60),
@@ -155,6 +155,25 @@ begin
 		values (_cedula, _nombre, _apellido1, _apellido2, _activo, _fechaNacimiento, _areaEspecialidad);
 		set idF = (select max(id) from Funcionario);
     end if;
+    select idF; 
+end $$
+delimiter ;
+delimiter $$
+create procedure sp_agregarFuncionarioReporte (
+
+	in _cedula varchar(20), 
+	in _nombre varchar(60),
+	in _apellido1 VARCHAR(60),
+	in _apellido2 VARCHAR(60),
+	in _activo bit,
+	in _fechaNacimiento datetime,
+	in _areaEspecialidad varchar(60)
+)
+begin
+	declare idF int;
+    insert into Funcionario (cedula, nombre, apellido1, apellido2, activo, fechaNacimiento, areaEspecialidad)
+    values (_cedula, _nombre, _apellido1, _apellido2, _activo, _fechaNacimiento, _areaEspecialidad);
+    set idF = (select max(id) from Funcionario);
     select idF; 
 end $$
 delimiter ; 
@@ -425,7 +444,7 @@ delimiter $$
 create procedure sp_agregarPlaza (  
 	
      in _descripcion varchar(200),
-     in _codigo varchar(8)
+     in _codigo varchar(16)
 )
 begin
 	declare valid int;
@@ -454,7 +473,7 @@ delimiter $$
 create procedure sp_agregarCaracteristicaPlaza (
 	
 	 in _idPlaza int, 
-	 in _codigo varchar(8), 
+	 in _codigo varchar(16), 
 	 in _periodo double,
 	 in _programa int,
 	 in _tipo varchar(6),
@@ -761,5 +780,22 @@ begin
 	insert into PlazaContratacion (idPlaza, idContrato, idDependencia, idFuncionario, porcentajeContratacion)
     values (_idPlaza, _idContrato, _idDependencia, _idFuncionario, _porcentajeContratacion);
     
+end $$
+delimiter ;
+
+delimiter $$
+create procedure sp_agregarPuestosPlaza (  
+     in _codigoPuesto int,
+     in _puesto varchar(75),
+     in _idCategoria int
+)
+begin
+	declare valid int;
+
+    insert into PuestosPlaza (codigoPuesto, puesto, idCategoria)
+    values (_codigoPuesto, _puesto, _idCategoria);
+    set valid = (select max(id) from PuestosPlaza);
+    
+    select valid;
 end $$
 delimiter ;

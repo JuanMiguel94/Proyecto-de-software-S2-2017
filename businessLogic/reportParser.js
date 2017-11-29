@@ -1,48 +1,19 @@
 const XLSX = require('../xlsx.full.min.js')
+const plazaService = require('./plazaService')
+const puestoPlazaService = require('./puestoPlazaService')
+var puestos
+var puestoTemporal = ""
 
-exports.parse = function(file){     
-    const workbook = XLSX.read(file, {type: "binary", cellFormula: false, cellHTML: false});
-    const registers =  workbook.Sheets.Hoja1;    
-    for (let i = 1; i <= getNumberOfRegisters(workbook); i++) {
-
-        let temp = registers['A'+i].v;
-
-        if (temp.match(/Centro Funcional/)) 
-            var centro = parseFirstHeader(temp)
-
-        else if (temp.match(/Plaza(: | :)/))
-            var plaza = parseSecondHeader(temp)
-
-        else if (temp.match(/Empleado/))
-            continue
-
-        else {
-
-            const {cedula, apellido1, apellido2, nombre} = parseEmpleadoColumn(temp)
-
-            temp = registers['B'+i].v
-
-            const {fechaInicial, fechaFinal, months} = parseDates(temp)
-            const {codigo, tipo, puesto} = parsePlaza(plaza)
-            const porcentajePlaza = registers['C'+i].v;            
-
-            const newRegister = { "centro": centro,                                        
-                                "nombre": nombre,
-                                "apellido1": apellido1,
-                                "apellido2": apellido2,
-                                "cedula": cedula,
-                                "código": codigo,                                                                         
-                                "fechaInicial": fechaInicial,
-                                "fechaFinal": fechaFinal,
-                                "periodo": months,
-                                "porcentajePlaza": porcentajePlaza,
-                                "puesto": puesto,
-                                "tipo": tipo};
-
-            console.log(newRegister);
-        }                                            
-    };
-};
+exports.parse = (file) => {
+    return new Promise((resolve, reject)=>{
+        const workbook = XLSX.read(file, {type: "binary", cellFormula: false, cellHTML: false});    
+        plazaService.getPuestos(res => {
+            puestos = res.data                
+            resolve (startToParseFile2(workbook))
+        })
+    })
+        
+}
 parseFirstHeader =  cell =>
     cell.replace(/Centro Funcional(: | : )/, "")
 
@@ -51,13 +22,13 @@ parseSecondHeader = cell =>
 
 
 parseEmpleadoColumn = cell => {
-    let cedula = cell.replace(/ [\wñÑáéíóúÁÉÍÓÚ ]*/, "");
-    let apellidoAux = cell.replace(/\d* /,"");
-    let apellido1 = apellidoAux.replace(/ [\w ]*/, "");
-    let apellido2Aux = apellidoAux.replace(/(\w+ ){1}/, "");
-    let apellido2 = apellido2Aux.replace(/ [\w ]*/, "");
-    let nombre = apellidoAux.replace(/(\w+ ){2}/, "");
-    return {cedula: cedula, apellido1: apellido1, apellido2: apellido1, nombre: nombre}
+    let cedula = cell.replace(/ [\wñÑáéíóúÁÉÍÓÚ. ]*/, "");
+    let nombre = cell.replace(/\d* /,"");
+
+    let apellido1 = ""
+    let apellido2 = ""   
+    
+    return {cedula: cedula, apellido1: apellido1, apellido2: apellido2, nombre: nombre}
 }
 
 parseDates = cell => {
@@ -85,7 +56,7 @@ parseDates = cell => {
     return {fechaInicial: fechaInicial, fechaFinal: fechaFinal, months: months}
 }
 
-parsePlaza = plaza => {
+parsePlazaSegment = plaza => {
     let codigo = plaza.replace(/ - .*/, "");
     let tipo = plaza.replace(/\d* - .*/, "");
     let puesto = plaza.replace(/.* - /, "");
@@ -99,7 +70,7 @@ getNumberOfRegisters = workbook => {
     let worksheet = workbook.Sheets[first_sheet_name];
     let value = worksheet['!ref'];
     return parseInt(value.substring(4));
-};
+}
 
 monthDiff = (d1, d2) => {
     let months;
@@ -107,4 +78,173 @@ monthDiff = (d1, d2) => {
     months -= d1.getMonth() + 1;
     months += d2.getMonth() + 1;
     return months <= 0 ? 0 : months;
-};
+}
+calcularTCE = (periodo, jornada) => periodo/12 * jornada/100
+
+obtenerCategoriaDePuesto = (puestos, puesto) => {
+    let cat = null
+    
+    puestos.map((p) =>{
+        if(p.puesto == puesto){
+            cat = p.categoria
+        }
+    })
+    if(!cat){
+        if(puestoTemporal == puesto)
+            return null
+        puestoTemporal = puesto        
+        puestoPlazaService.addPuestoPlaza({codigoPuesto: null, puesto: puesto, idCategoria: 16}, res => {            
+            plazaService.getPuestos(res=>{
+                puestos = res.data
+            })
+        })
+        cat = null
+    }
+    return cat
+}
+
+obtenerIdDePuesto = (puestos, puesto) => {
+    let id
+    puestos.map((p) => {
+        if(p.puesto == puesto){
+            id = p.id
+            return p.id
+        }
+    })
+    return id
+}
+
+agregarPuestoPlaza = (nombrePuesto) => {
+
+}
+/*
+startToParseFile = (workbook) => {
+    const registers =  workbook.Sheets.Hoja1;
+    const newRegisters = []
+
+    for (let i = 1; i <= getNumberOfRegisters(workbook); i++) {        
+        let temp = registers['A'+i].v;
+
+        if (temp.match(/Centro Funcional/)) 
+            var centro = parseFirstHeader(temp)
+
+        else if (temp.match(/Plaza(: | :)/)){
+            var plaza = parseSecondHeader(temp)
+            var {codigo, tipo, puesto} = parsePlaza(plaza)
+            var categoria = obtenerCategoriaDePuesto(puestos, puesto)
+            var puestoId = obtenerIdDePuesto(puestos, puesto)
+        }
+        else if (temp.match(/Empleado/))
+            continue
+
+        else {
+
+            const {cedula, apellido1, apellido2, nombre} = parseEmpleadoColumn(temp)
+
+            temp = registers['B'+i].v
+
+            const {fechaInicial, fechaFinal, months} = parseDates(temp)
+            const porcentajePlaza = registers['C'+i].v;
+            const tce = calcularTCE(months, porcentajePlaza)         
+
+            const newRegister = { "centro": centro,                                        
+                                "nombre": nombre,
+                                "apellido1": apellido1,
+                                "apellido2": apellido2,
+                                "cedula": cedula,
+                                "código": codigo,                                                                         
+                                "fechaInicial": fechaInicial,
+                                "fechaFinal": fechaFinal,
+                                "periodo": months,
+                                "porcentajePlaza": porcentajePlaza,
+                                "puesto": puestoId,
+                                "tipo": tipo,
+                                "tce": tce,
+                                "categoria": categoria};
+
+                                newRegisters.push(newRegister);
+        }                                            
+    }
+    
+    return newRegisters
+}
+*/
+parseDependencia = (temp, data, registers, i) => {
+    if (temp.match(/Centro Funcional/)){
+        data.centro = parseFirstHeader(temp)
+        return data
+    }
+    else{
+        return parsePlaza(temp, data, registers, i)
+    }
+}
+parsePlaza = (temp, data, registers, i) => {    
+    if (temp.match(/Plaza(: | :)/)){
+        data.plaza = parseSecondHeader(temp)
+        var {codigo, tipo, puesto} = parsePlazaSegment(data.plaza)
+        data.codigo = codigo
+        data.tipo = tipo
+        data.puesto = puesto
+
+        
+        data.categoria = obtenerCategoriaDePuesto(puestos, puesto)
+        data.puestoId = obtenerIdDePuesto(puestos, puesto)
+        return data        
+    }
+    else if (temp.match(/Empleado/))
+    {
+        return data
+    }
+    else{
+        return finishParsing(temp, data, registers, i)
+    }
+}
+finishParsing = (temp, data, registers, i) => {
+    const {cedula, apellido1, apellido2, nombre} = parseEmpleadoColumn(temp)
+    data.cedula = cedula
+    data.apellido1 = apellido1
+    data.apellido2 = apellido2
+    data.nombre = nombre
+
+    temp = registers['B'+i].v
+
+    const {fechaInicial, fechaFinal, months} = parseDates(temp)
+    data.fechaInicial = fechaInicial
+    data.fechaFinal = fechaFinal
+    data.months = months
+
+    data.porcentajePlaza = registers['C'+i].v;
+    
+    data.tce = calcularTCE(months, data.porcentajePlaza)         
+
+    const newRegister = { "centro": data.centro,                                        
+                        "nombre": data.nombre,
+                        "apellido1": data.apellido1,
+                        "apellido2": data.apellido2,
+                        "cedula": data.cedula,
+                        "codigo": data.codigo,                                                                         
+                        "fechaInicial": data.fechaInicial,
+                        "fechaFinal": data.fechaFinal,
+                        "periodo": data.months,
+                        "porcentajePlaza": data.porcentajePlaza,
+                        "puesto": data.puestoId,
+                        "tipo": data.tipo,
+                        "tce": data.tce,
+                        "categoria": data.categoria};
+
+    data.newRegisters.push(newRegister);
+    return data
+}
+
+startToParseFile2 = (workbook) => {
+    const registers =  workbook.Sheets.Hoja1;    
+    let data = {
+        newRegisters: []
+    }
+    
+    for (let i = 1; i <= getNumberOfRegisters(workbook); i++) {        
+        let temp = registers['A'+i].v;
+        data = parseDependencia(temp, data, registers, i)                                   
+    }
+    return data.newRegisters
+}

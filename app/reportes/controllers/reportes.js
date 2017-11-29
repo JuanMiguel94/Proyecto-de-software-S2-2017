@@ -6,10 +6,11 @@
 	    function($scope, sheetService){
 			$scope.$watch("fileread", function(newValue, oldValue) {
 				if(newValue){
-					data = {
-						user: sessionStorage.getItem('user'),
+					const data = {
+						user: JSON.parse(sessionStorage.getItem('user')).usuario,
 						file: newValue
-					}				
+					}
+					console.log(data.user)											
 					sheetService.updateDatabaseFeed(data)
 					console.log('new value')
 				}						  

@@ -4,10 +4,10 @@
                 var socket = io.connect('http://localhost:8080', {'forceNew': true});
                 var updateDatabaseFeed = (data) => {
                     socket.emit('database-feed', data);
-                }
-           
+                }           
                 return {
                         updateDatabaseFeed: data => updateDatabaseFeed(data)
                 };
             }]);
     })();
+    

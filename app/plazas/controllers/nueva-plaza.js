@@ -53,6 +53,7 @@
 	    	};
 
 		    $scope.validatedPlaza = function(pIsValid, pIsValid2, pIsValid3, pData) {
+				console.log("puesto", pData.puesto)
 				pData.puesto = JSON.parse(pData.puesto);
 		    	if(pIsValid && pIsValid2 && pIsValid3) {
 		    		var plazaInfo = {
