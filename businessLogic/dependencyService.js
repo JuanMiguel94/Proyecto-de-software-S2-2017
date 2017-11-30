@@ -122,7 +122,7 @@ exports.addDependency = function(data, callback){
                     callback(
                     {
                         success: true,
-                        data: null,
+                        data: daraQuery[0][0].idD,
                         message: "La dependencia se agregó correctamente"
                     });
                 });
@@ -169,7 +169,6 @@ exports.updateDependency = function(data, callback){
     }, 
     function(success, dataQuery) {
         if(success) {
-
             if(dataQuery[0][0].valid == 0) {
                 callback(
                 {
@@ -254,7 +253,7 @@ exports.addDependencyReporte = function(data, callback){
                 callback(
                 {
                     success: true,
-                    data: null,
+                    data: dataQuery[0][0].idD,
                     message: "La dependencia se agregó correctamente"
                 });
             });

@@ -88,40 +88,24 @@ var plazaContratacionInfo = {
     idFuncionario: 1,
     porcentajeContratacion: 100
 }
-const insertPlaza = (user, information) => {
-    plazaInfo = {
-        usuarioActual: user,
-        descripcion: null,
-        codigo: information.codigo,
-        periodo: information.periodo,
-        programa: null,
-        categoria: information.categoria,
-        tipo: information.codigo.slice(0,2),
-        puesto: information.puesto,
-        jornada: information.porcentajePlaza,
-        fechaAutorizacionInicio: information.fechaInicial,
-        fechaAutorizacionFinal: information.fechaFinal,
-        articulo: null,
-        numeroSesion: null,
-        fechaAcuerdo: null,
-        tce: information.tce
-    }
-    agregarPlaza = new Promise((resolve, reject)=>
-    plazaServie.addPlazaReporte(plazaInfo, res => resolve(res.data)))
-    
-    agregarPlaza.then(res => {
-        console.log("Plaza: ", information.codigo)    
-        plazaInfo.idPlaza = res
-        plazaServie.addPlazaInfo(plazaInfo, res => console.log(res))
-    })  
-}
 */
-exports.foo2 = (user, data) => {
+
+exports.insertarPlazas = (user, data) => {
     let plaza
     let i = 0
-    foo2Aux(user, data, plaza, i)
+    insertarPlazasAux(user, data, plaza, i)
 }
-let foo2Aux = (user, data, plaza, i)=>{
+exports.insertarDependencias = (user, data) => {    
+    let centrosFuncionales = [];
+    let i = 0
+    insertarDependenciasAux(user, data, centrosFuncionales, i)
+}
+exports.insertarFuncionarios = (user, data) => {
+    let cedulas = [];
+    let i = 0
+    insertarFuncionariosAux(user, data, cedulas, i)
+}
+const insertarPlazasAux = (user, data, plaza, i)=>{
     if(i >= data.length)
         return
     if (!plaza || data[i].codigo != plaza) {
@@ -147,45 +131,21 @@ let foo2Aux = (user, data, plaza, i)=>{
         agregarPlaza = new Promise((resolve, reject)=>
         plazaServie.addPlazaReporte(plazaInfo, res => resolve(res.data)))
         
-        agregarPlaza.then(res => {
+        agregarPlaza.then(res => { 
+            plazaIdTemp = res          
+            plazaIDs.push({index: i, id: res})            
             plazaInfo.idPlaza = res
             plazaInfo.puesto = 1;            
             plazaServie.addPlazaInfo(plazaInfo, res => console.log(res))
-            foo2Aux(user, data, plaza, i + 1)
+            insertarPlazasAux(user, data, plaza, i + 1)
         })
     }
     else{
-        foo2Aux(user, data, plaza, i + 1)
+        plazaIDs.push({index: i, id: plazaIdTemp})
+        insertarPlazasAux(user, data, plaza, i + 1)
     }  
 }
-/*
-exports.foo3 = (user, data) => {
-    let cedula;
-    let i = 0    
-    foo3Aux(user, data, cedula, i)
-}
-
-foo3Aux = (user, data, cedula, i) => {
-    if(i >= data.length)
-        return    
-    if (!cedula || cedula != data[i].cedula) {        
-        cedula = data[i].cedula
-        insertFuncionario(user, data[i])
-        foo3Aux(user, data, cedula, i + 1)
-        
-    }
-    else {
-        foo3Aux(user, data, cedula, i + 1)
-    }
-}*/
-
-exports.foo3 = (user, data) => {
-    let cedulas = [];
-    let i = 0
-    foo3Aux(user, data, cedulas, i)
-}
-
-foo3Aux = (user, data, cedulas, i) => {
+const insertarFuncionariosAux = (user, data, cedulas, i) => {
     if(i >= data.length)
         return
     if (!cedulas.find(cedula => data[i].cedula == cedula)) {        
@@ -193,31 +153,31 @@ foo3Aux = (user, data, cedulas, i) => {
     
         let prom = insertFuncionario(user, data[i])
 
-        prom.then(res => {            
-            foo3Aux(user, data, cedulas, i + 1)
+        prom.then(res => {
+            funcionarioIdTemp = res.data         
+            funcionarioIDs.push({index: i, id: res.data})           
+            insertarFuncionariosAux(user, data, cedulas, i + 1)
         })        
     }
-    else {        
-        foo3Aux(user, data, cedulas, i + 1)
+    else {
+        funcionarioIDs.push({index: i, id: funcionarioIdTemp})
+        insertarFuncionariosAux(user, data, cedulas, i + 1)
     }
 }
-
-exports.foo = (user, data) => {    
-    let centroFuncional;
-    let i = 0
-    fooAux(user, data, centroFuncional, i)
-}
-fooAux = (user, data, centroFuncional, i) => {
+const insertarDependenciasAux = (user, data, centrosFuncionales, i) => {
     if(i >= data.length)
         return    
-    if (!centroFuncional || data[i].centro != centroFuncional){
-        centroFuncional = data[i].centro            
-        insertarDependencia(user, data[i]).then(()=>{
-            fooAux(user, data, centroFuncional, i + 1)    
+    if (!centrosFuncionales.find(centroFuncional => data[i].centro == centroFuncional)){        
+        centrosFuncionales.push(data[i].centro)
+        insertarDependencia(user, data[i]).then(res =>{
+            dependenciaIdTemp = res.data
+            dependenciaIDs.push({index: i, id: res.data})
+            insertarDependenciasAux(user, data, centrosFuncionales, i + 1)    
         })
     }
     else {
-        fooAux(user, data, centroFuncional, i + 1)
+        dependenciaIDs.push({index: i, id: dependenciaIdTemp})
+        insertarDependenciasAux(user, data, centrosFuncionales, i + 1)
     }
 }
 const insertPlaza = (user, information) => {
@@ -238,7 +198,7 @@ const insertPlaza = (user, information) => {
         fechaAcuerdo: null,
         tce: information.tce
     }
-    agregarPlaza = new Promise((resolve, reject)=>
+    agregarPlaza = new Promise((resolve, reject) =>
     plazaServie.addPlazaReporte(plazaInfo, res => resolve(res.data)))
     
     agregarPlaza.then(res => {
@@ -247,10 +207,6 @@ const insertPlaza = (user, information) => {
         plazaServie.addPlazaInfo(plazaInfo, res => console.log(res))
     })  
 }
-
-
-
-
 const insertarDependencia = (user, information) => {
     var dependencyInfo = {
         usuario: user,
@@ -258,11 +214,10 @@ const insertarDependencia = (user, information) => {
         nombre: information.centro 
     }
     return new Promise((resolve, reject)=>{
-        resolve(dependencyService.addDependencyReporte(dependencyInfo, res => 
-            console.log(res)))
+        dependencyService.addDependencyReporte(dependencyInfo, res => 
+            resolve(res))
     })
 }
-
 const insertFuncionario = (user, information) => {
     
     funcionarioInfo = {
@@ -283,18 +238,3 @@ const insertFuncionario = (user, information) => {
         })
     })
 }
-
-/*
-{ centro: 'SEDE REG. SAN CARLOS - SUPLENCIAS',
-  nombre: 'MARIA DE LOS ANGELES',
-  apellido1: 'GUZMAN',
-  apellido2: 'GUZMAN',
-  cedula: '205320418',
-  'código': 'SUP05-004',
-  fechaInicial: 2014-03-08T00:00:00.000Z,
-  fechaFinal: 2014-03-09T00:00:00.000Z,
-  periodo: 0,
-  porcentajePlaza: 100,
-  puesto: 'Suplencias Administración San Carlos',
-  tipo: 'SUP05-' }
-*/
