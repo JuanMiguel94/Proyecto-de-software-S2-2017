@@ -10,7 +10,7 @@ var formatDateFromJSToMySQL = function(JSdate){
     return new Date(JSdate).toISOString().substring(0, 10);
 };
 
-exports.createFuncionario = function(data, callback){
+exports.createFuncionario = function(data, callback){    
     var paramsString = '\"'+data.cedula+'\"'+','+
                        '\"'+data.nombre+'\"'+','+
                        '\"'+data.primerApellido+'\"'+','+

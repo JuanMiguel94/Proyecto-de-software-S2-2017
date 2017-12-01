@@ -8,7 +8,8 @@ var connection = require('./connection.js');
 
 exports.executeQuery = function(data, callback) {
     var sql = 'CALL '+data.spName+'('+data.params+')';      
-    var conn = connection.createConnection();    
+    var conn = connection.createConnection();
+    console.log(sql)  
     conn.connect(function(err) {
     if(err) {        
         callback(false, null);

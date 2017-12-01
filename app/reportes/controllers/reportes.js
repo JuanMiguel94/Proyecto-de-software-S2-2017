@@ -9,10 +9,8 @@
 					const data = {
 						user: JSON.parse(sessionStorage.getItem('user')).usuario,
 						file: newValue
-					}
-					console.log(data.user)											
-					sheetService.updateDatabaseFeed(data)
-					console.log('new value')
+					}																
+					sheetService.updateDatabaseFeed(data)					
 				}						  
 					
 			})

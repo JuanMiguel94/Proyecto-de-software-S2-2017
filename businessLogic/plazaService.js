@@ -61,12 +61,11 @@ exports.addPlaza = function(data, callback){
     });        
 };
 
-exports.addPlazaReporte = function(data, callback){
+exports.addPlazaReporte = function(data, callback){    
     data.fechaAutorizacionInicio = formatDateFromJSToMySQL(data.fechaAutorizacionInicio);
     if (data.fechaAutorizacionFinal != ""){
         data.fechaAutorizacionFinal = formatDateFromJSToMySQL(data.fechaAutorizacionFinal);
-    }
-    
+    }    
     var sp_params = "\"" + data.descripcion + "\"," + "\"" + data.codigo + "\"";
     repository.executeQuery({
         spName: 'sp_agregarPlaza',

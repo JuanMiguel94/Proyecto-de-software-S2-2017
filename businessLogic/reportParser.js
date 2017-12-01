@@ -81,7 +81,7 @@ monthDiff = (d1, d2) => {
 }
 calcularTCE = (periodo, jornada) => periodo/12 * jornada/100
 
-obtenerCategoriaDePuesto = (puestos, puesto) => {
+obtenerCategoriaDePuesto = (puesto) => {
     let cat = null
     
     puestos.map((p) =>{
@@ -89,86 +89,20 @@ obtenerCategoriaDePuesto = (puestos, puesto) => {
             cat = p.categoria
         }
     })
-    if(!cat){
-        if(puestoTemporal == puesto)
-            return null
-        puestoTemporal = puesto        
-        puestoPlazaService.addPuestoPlaza({codigoPuesto: null, puesto: puesto, idCategoria: 16}, res => {            
-            plazaService.getPuestos(res=>{
-                puestos = res.data
-            })
-        })
-        cat = null
-    }
     return cat
 }
 
-obtenerIdDePuesto = (puestos, puesto) => {
-    let id
+obtenerIdDePuesto = (puesto) => {
+    let id = null
     puestos.map((p) => {
         if(p.puesto == puesto){
             id = p.id
             return p.id
         }
     })
-    return id
+    return null
 }
 
-agregarPuestoPlaza = (nombrePuesto) => {
-
-}
-/*
-startToParseFile = (workbook) => {
-    const registers =  workbook.Sheets.Hoja1;
-    const newRegisters = []
-
-    for (let i = 1; i <= getNumberOfRegisters(workbook); i++) {        
-        let temp = registers['A'+i].v;
-
-        if (temp.match(/Centro Funcional/)) 
-            var centro = parseFirstHeader(temp)
-
-        else if (temp.match(/Plaza(: | :)/)){
-            var plaza = parseSecondHeader(temp)
-            var {codigo, tipo, puesto} = parsePlaza(plaza)
-            var categoria = obtenerCategoriaDePuesto(puestos, puesto)
-            var puestoId = obtenerIdDePuesto(puestos, puesto)
-        }
-        else if (temp.match(/Empleado/))
-            continue
-
-        else {
-
-            const {cedula, apellido1, apellido2, nombre} = parseEmpleadoColumn(temp)
-
-            temp = registers['B'+i].v
-
-            const {fechaInicial, fechaFinal, months} = parseDates(temp)
-            const porcentajePlaza = registers['C'+i].v;
-            const tce = calcularTCE(months, porcentajePlaza)         
-
-            const newRegister = { "centro": centro,                                        
-                                "nombre": nombre,
-                                "apellido1": apellido1,
-                                "apellido2": apellido2,
-                                "cedula": cedula,
-                                "código": codigo,                                                                         
-                                "fechaInicial": fechaInicial,
-                                "fechaFinal": fechaFinal,
-                                "periodo": months,
-                                "porcentajePlaza": porcentajePlaza,
-                                "puesto": puestoId,
-                                "tipo": tipo,
-                                "tce": tce,
-                                "categoria": categoria};
-
-                                newRegisters.push(newRegister);
-        }                                            
-    }
-    
-    return newRegisters
-}
-*/
 parseDependencia = (temp, data, registers, i) => {
     if (temp.match(/Centro Funcional/)){
         data.centro = parseFirstHeader(temp)
@@ -187,8 +121,8 @@ parsePlaza = (temp, data, registers, i) => {
         data.puesto = puesto
 
         
-        data.categoria = obtenerCategoriaDePuesto(puestos, puesto)
-        data.puestoId = obtenerIdDePuesto(puestos, puesto)
+        data.categoria = obtenerCategoriaDePuesto(puesto)
+        data.puestoId = obtenerIdDePuesto(puesto)
         return data        
     }
     else if (temp.match(/Empleado/))
@@ -199,6 +133,7 @@ parsePlaza = (temp, data, registers, i) => {
         return finishParsing(temp, data, registers, i)
     }
 }
+
 finishParsing = (temp, data, registers, i) => {
     const {cedula, apellido1, apellido2, nombre} = parseEmpleadoColumn(temp)
     data.cedula = cedula
