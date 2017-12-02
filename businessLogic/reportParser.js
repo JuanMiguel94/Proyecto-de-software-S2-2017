@@ -82,13 +82,16 @@ monthDiff = (d1, d2) => {
 calcularTCE = (periodo, jornada) => periodo/12 * jornada/100
 
 obtenerCategoriaDePuesto = (puesto) => {
-    let cat = null
+    let cat
     
     puestos.map((p) =>{
         if(p.puesto == puesto){
             cat = p.categoria
         }
     })
+    if(!cat){
+        return 16
+    }
     return cat
 }
 
@@ -100,7 +103,7 @@ obtenerIdDePuesto = (puesto) => {
             return p.id
         }
     })
-    return null
+    return 60
 }
 
 parseDependencia = (temp, data, registers, i) => {

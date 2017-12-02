@@ -532,5 +532,6 @@ insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(407, 'Profeso
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(430, 'Regente',15);
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(506, 'Rector (a)',15);
 insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(505, 'Vicerrector (a)',15);
+insert into PuestosPlaza(codigoPuesto, puesto, idCategoria) values(-1, 'No encontrado', 16);
 
 set global max_connections = 100000;
