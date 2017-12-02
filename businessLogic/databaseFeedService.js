@@ -119,46 +119,37 @@ const insertarDependenciasAux = (user, data, idTemporal, registrados, i) => {
 
         insertarDependencia(user, data[i])
         .then(res =>{
-
             idTemporal.dependencia = res.data
-            
-            let promises = []
-            promises.push(insertPlaza2(user, registrados, data[i]))
-            promises.push(insertFuncionario2(user, registrados, data[i]))
-            Promise.all(promises).then(results => {
-                if(results[0]){
-                    idTemporal.plaza = results[0]
-                    insertarCaracteristicasPlaza(user, data[i], results[0])
-                }
-                
-                if(results[1])
-                    idTemporal.funcionario = results[1].data                    
-                
-                
-                insertRelaciones(results[0], results[1], user,  idTemporal)
-                insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
-            })
+            insertarPlazaSection(user, registrados, data, idTemporal, i)
         })
     }
     else {
-        let promises = []
-        promises.push(insertPlaza2(user, registrados, data[i]))
-        promises.push(insertFuncionario2(user, registrados, data[i]))
-        Promise.all(promises).then(results => {
-            if(results[0]){
-                idTemporal.plaza = results[0]
-                insertarCaracteristicasPlaza(user, data[i], results[0])
-            }
-            
-            if(results[1])
-                idTemporal.funcionario = results[1].data                    
-            
-            
-            insertRelaciones(results[0], results[1], user,  idTemporal)
-            insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
-        })
+        insertarPlazaSection(user, registrados, data, idTemporal, i)
     }
 }
+
+const insertarPlazaSection = (user, registrados, data, idTemporal, i) => {
+    let promises = []
+    promises.push(insertPlaza2(user, registrados, data[i]))
+    promises.push(insertFuncionario2(user, registrados, data[i]))
+    Promise.all(promises).then(results => {
+        let promises2 = []
+        if(results[0]){
+            idTemporal.plaza = results[0]
+            insertarCaracteristicasPlaza(user, data[i], results[0])
+            promises2.push(insertarPlazaDependencia(user, data[i], idTemporal))
+        }
+        if(results[1]){
+            idTemporal.funcionario = results[1].data
+            promises2.push(insertarFuncionarioDependencia(user, idTemporal.dependencia, idTemporal.funcionario))
+        }                                            
+
+        Promise.all(promises2).then(results =>{            
+            insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
+        })
+    })
+}
+
 const insertPlaza = (user, information) => {
     plazaInfo = {
         usuarioActual: user,
@@ -260,33 +251,23 @@ const insertFuncionario2 = (user, registrados, infomacion) => {
 
 }
 
-const insertRelaciones = (plazaResult, funcionarioResult, user,  idTemporal) => {
-    if(plazaResult){
-        idTemporal.plaza = plazaResult
-        //insertarPlazaDependencia(user, data[i], idTemporal)
-    }
-    if(funcionarioResult){
-        idTemporal.funcionario = funcionarioResult.data
-        //insertarFuncionarioDependencia(user, idTemporal.dependencia, idTemporal.funcionario)
-    }
-}
-
 const insertarPlazaDependencia = (user, information, idTemporal) => {
     var plazaDependeciaInfo = {
-        fechaInicio:  new Date(20, 11, 2016),
-        fechaFinal:  new Date(20, 11, 2016),
+        fechaInicio:  null,
+        fechaFinal:  null,
         indefinida: 0,
-        porcentajeAsignado: 100,
-        descripcion: "descripcion corta",
-        codigo: "HH5223",
-        tipo: "BM",
-        jornada: 5,
+        porcentajeAsignado: null,
+        descripcion: null,
+        codigo: information.codigo,
+        tipo: information.tipo,
+        jornada: information.porcentajePlaza,
         usuario: user,
-        idPlaza: idTemporal.idPlaza,
-        idDependencia: idTemporal.idDependencia
+        idPlaza: idTemporal.plaza,
+        idDependencia: idTemporal.dependencia
     }
-    plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => res)
-
+    return new Promise((resolve, reject) => {
+        plazaDependenciaService.assignPlazaDependencia(plazaDependeciaInfo, res => resolve(res))
+    })    
 }
 
 const insertarFuncionarioDependencia = (user, idDependencia, idFuncionario) => {
@@ -295,5 +276,7 @@ const insertarFuncionarioDependencia = (user, idDependencia, idFuncionario) => {
         idFuncionario: idFuncionario,
         idDependencia: idDependencia
     }
-    funDepService.assignFunDep(funDepInfo, res => res)
+    return new Promise((resolve, reject) => {
+        funDepService.assignFunDep(funDepInfo, res => resolve(res))
+    })    
 }
