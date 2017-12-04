@@ -14,7 +14,7 @@ exports.addPlazaContratacion = function(data, callback){
         params: sp_params
     }, 
     function(success, dataQuery) {        
-        if(success) {                
+        if(success) {                    
             callback({
                 success: true, 
                 message: "Plaza contratación agregada correctamente",
@@ -22,7 +22,7 @@ exports.addPlazaContratacion = function(data, callback){
             });                                           
         } 
         else 
-        {
+        {            
         	callback(
             {
                 success: false,

@@ -60,7 +60,7 @@
             ];
             $scope.reportes = [
                 {
-                    name: "Reportes",
+                    name: "Poblar con archivo reporte",
                     link: "reportes"
                 }
             ];

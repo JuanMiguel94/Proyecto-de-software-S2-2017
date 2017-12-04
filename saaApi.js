@@ -18,9 +18,9 @@ io.on('connection', function (socket) {
     console.log('Alguien se ha conectado con sockets')
     socket.on('database-feed', (data) => {
         parser.parse(data.file).then(reg => {            
-            //databaseFeedService.insertarFuncionarios(data.user, reg)
-            //databaseFeedService.insertarPlazas(data.user, reg)
-            databaseFeedService.insertarDependencias(data.user, reg)
+            databaseFeedService.insertarDependencias(data.user, reg, progress => {                
+                socket.emit('loop-iteration', progress);
+            })
         })
     })
 })

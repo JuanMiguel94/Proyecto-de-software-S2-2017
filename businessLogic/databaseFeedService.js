@@ -5,56 +5,21 @@ const funDepService = require("./funDepService")
 const plazaDependenciaService = require("./plazaDependenciaService")
 const contratoService = require("./contratroService")
 const plazaContratacionService = require("./plazaContratacionService")
+var handleIteration
+exports.insertarDependencias = (user, data, iterationHandler) => {        
 
-
-/*
-var contratoInfo = {
-    idContratoLiberado: null,
-    idDependencia: 1,
-    idFuncionario: 1,
-    activo: 1,
-    actividad: null,
-    porqueContratacion: null,
-    quienNombro: null,
-    puestoQuienNombro: null,
-    porcentajeTotalContratacion: 100,
-    descripcion: "descripcion",
-    anno: 2017,
-    fechaInicio: new Date(20, 11, 2016),
-    fechaFinal: new Date(20, 11, 2016),
-    numeroConcurso: null,
-    suplencia: null,                   
-    porcentajeLiberado: null
-}
-
-var plazaContratacionInfo = {
-    idPlaza: 1,
-    idContrato: 1,
-    idDependencia: 1,
-    idFuncionario: 1,
-    porcentajeContratacion: 100
-}
-*/
-
-exports.insertarPlazas = (user, data) => {
-    let plaza
-    let i = 0
-    insertarPlazasAux(user, data, plaza, i)
-}
-exports.insertarDependencias = (user, data) => {    
+    handleIteration = iterationHandler
+    
     let registrados = {
         centrosFuncionales: [],
         plazas: [],
         funcionarios: []
     };
     let i = 0
+
     insertarDependenciasAux(user, data, {},  registrados, i)
 }
-exports.insertarFuncionarios = (user, data) => {
-    let cedulas = [];
-    let i = 0
-    insertarFuncionariosAux(user, data, cedulas, i)
-}
+
 const insertarPlazasAux = (user, data, plaza, i)=>{
     if(i >= data.length)
         return
@@ -108,8 +73,8 @@ const insertarFuncionariosAux = (user, data, cedulas, i) => {
         insertarFuncionariosAux(user, data, cedulas, i + 1)
     }
 }
-const insertarDependenciasAux = (user, data, idTemporal, registrados, i) => {
-
+const insertarDependenciasAux = (user, data, idTemporal, registrados, i) => {    
+    handleIteration(i/data.length*100)
     if(i >= data.length)
         return
 
@@ -119,35 +84,65 @@ const insertarDependenciasAux = (user, data, idTemporal, registrados, i) => {
 
         insertarDependencia(user, data[i])
         .then(res =>{
-            idTemporal.dependencia = res.data
+            idTemporal.dependencia = res.data            
             insertarPlazaSection(user, registrados, data, idTemporal, i)
+            .then(results => {
+                let promises2 = []
+                if(results[0]){
+                    idTemporal.plaza = results[0]
+                    promises2.push(insertarCaracteristicasPlaza(user, data[i], results[0]))
+                    promises2.push(insertarPlazaDependencia(user, data[i], idTemporal))
+                }
+
+                if(results[1]){
+                    idTemporal.funcionario = results[1].data
+                    promises2.push(insertarFuncionarioDependencia(user, idTemporal.dependencia, idTemporal.funcionario))
+                }
+        
+                
+                return Promise.all(promises2).then(results =>{                    
+                    insertarContratoInfo(data[i], idTemporal).then(res => {                        
+                        let idContrato = res.data                
+                        insertarPlazaContratacion(data[i], idTemporal, idContrato).then(res =>{                            
+                            insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
+                        })
+                    })
+                })
+            })      
         })
     }
-    else {
+    else {        
         insertarPlazaSection(user, registrados, data, idTemporal, i)
+        .then(results => {
+            let promises2 = []
+            if(results[0]){
+                idTemporal.plaza = results[0]
+                promises2.push(insertarCaracteristicasPlaza(user, data[i], results[0]))
+                promises2.push(insertarPlazaDependencia(user, data[i], idTemporal))
+            }
+            if(results[1]){
+                idTemporal.funcionario = results[1].data
+                promises2.push(insertarFuncionarioDependencia(user, idTemporal.dependencia, idTemporal.funcionario))
+            }
+
+            
+            return Promise.all(promises2).then(results =>{                
+                insertarContratoInfo(data[i], idTemporal).then(res => {                    
+                    let idContrato = res.data                
+                    insertarPlazaContratacion(data[i], idTemporal, idContrato).then(res =>{                        
+                        insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
+                    })
+                })
+            })
+        })      
     }
 }
 
-const insertarPlazaSection = (user, registrados, data, idTemporal, i) => {
+const insertarPlazaSection = (user, registrados, data, idTemporal, i) => {    
     let promises = []
     promises.push(insertPlaza2(user, registrados, data[i]))
     promises.push(insertFuncionario2(user, registrados, data[i]))
-    Promise.all(promises).then(results => {
-        let promises2 = []
-        if(results[0]){
-            idTemporal.plaza = results[0]
-            insertarCaracteristicasPlaza(user, data[i], results[0])
-            promises2.push(insertarPlazaDependencia(user, data[i], idTemporal))
-        }
-        if(results[1]){
-            idTemporal.funcionario = results[1].data
-            promises2.push(insertarFuncionarioDependencia(user, idTemporal.dependencia, idTemporal.funcionario))
-        }                                            
-
-        Promise.all(promises2).then(results =>{            
-            insertarDependenciasAux(user, data, idTemporal, registrados, i + 1)
-        })
-    })
+    return Promise.all(promises)
 }
 
 const insertPlaza = (user, information) => {
@@ -192,7 +187,9 @@ const insertarCaracteristicasPlaza = (user, information, res) => {
         tce: information.tce
     }
     plazaInfo.idPlaza = res        
-    plazaService.addPlazaInfo(plazaInfo, res => res)
+    return new Promise((resolve, reject)=>{
+        plazaService.addPlazaInfo(plazaInfo, res => resolve(res))
+    })
 }
 
 const insertarDependencia = (user, information) => {
@@ -226,25 +223,22 @@ const insertFuncionario = (user, information) => {
     })
 }
 
-////////////
-
-
-const insertPlaza2 = (user, registrados, infomacion) => {
+const insertPlaza2 = (user, registrados, information) => {
     
-    if(!registrados.plazas.find(codigo => infomacion.codigo == codigo)){
-        registrados.plazas.push(infomacion.codigo)
-        return insertPlaza(user, infomacion)
+    if(!registrados.plazas.find(codigo => information.codigo == codigo)){
+        registrados.plazas.push(information.codigo)
+        return insertPlaza(user, information)
     }        
     else
         return new Promise((resolve, reject) => resolve(false))
 
 }
 
-const insertFuncionario2 = (user, registrados, infomacion) => {
+const insertFuncionario2 = (user, registrados, information) => {
     
-    if (!registrados.funcionarios.find(cedula => infomacion.cedula == cedula)){
-        registrados.funcionarios.push(infomacion.cedula)
-        return insertFuncionario(user, infomacion)
+    if (!registrados.funcionarios.find(cedula => information.cedula == cedula)){
+        registrados.funcionarios.push(information.cedula)
+        return insertFuncionario(user, information)
     }        
     else
         return new Promise((resolve, reject) => resolve(false))
@@ -279,4 +273,43 @@ const insertarFuncionarioDependencia = (user, idDependencia, idFuncionario) => {
     return new Promise((resolve, reject) => {
         funDepService.assignFunDep(funDepInfo, res => resolve(res))
     })    
+}
+
+const insertarContratoInfo = (information, idTemporal) => {
+    var contratoInfo = {
+        idContratoLiberado: null,
+        idDependencia: idTemporal.dependencia,
+        idFuncionario: idTemporal.funcionario,
+        activo: 1,
+        actividad: null,
+        porqueContratacion: null,
+        quienNombro: null,
+        puestoQuienNombro: null,
+        porcentajeTotalContratacion: null,
+        descripcion: null,
+        anno: null,
+        fechaInicio: information.fechaInicial,
+        fechaFinal: information.fechaFinal,
+        numeroConcurso: null,
+        suplencia: null,                   
+        porcentajeLiberado: null
+    }    
+    return new Promise((resolve, reject) => {        
+        contratoService.addContrato(contratoInfo, res => {            
+            resolve(res)
+        })   
+    })
+}
+
+const insertarPlazaContratacion = (information, idTemporal, idContrato) => {    
+    var plazaContratacionInfo = {
+        idPlaza: idTemporal.plaza,
+        idContrato: idContrato,
+        idDependencia: idTemporal.dependencia,
+        idFuncionario: idTemporal.funcionario,
+        porcentajeContratacion: information.porcentajePlaza
+    }
+    return new Promise((resolve, reject)=>{
+        plazaContratacionService.addPlazaContratacion(plazaContratacionInfo, res=> resolve(res))
+    })
 }

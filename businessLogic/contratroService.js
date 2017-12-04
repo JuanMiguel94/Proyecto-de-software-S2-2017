@@ -20,12 +20,12 @@ exports.addContrato = function(data, callback){
         spName: 'sp_agregarContrato',
         params: sp_params
     }, 
-    function(success, dataQuery) {        
-        if(success) {                
+    function(success, dataQuery) {
+        if(success) {
             callback({
                 success: true, 
                 message: "El contrato se agregó correctamente",
-                data: {}
+                data: dataQuery[0][0].valid
             });                                           
         } 
         else 
